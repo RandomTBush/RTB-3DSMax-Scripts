@@ -22,6 +22,7 @@
 - Sorcery Saga: Curse of the Great Curry God [PC / Vita]
 - Superdimension Neptune VS Sega Hard Girls [PC / Vita]
 - Trillion: God of Destruction [PC / Vita]
+
 (NOTE: Some models have broken rigging, and will be looked into sometime later.)
 
 `CrashNSane_IGZ` (09/04/2019)
@@ -128,10 +129,12 @@
 
 `OrochiEngine3_MDL` (12/04/2017)
 - World of Final Fantasy [PC / Vita]
+
 (I had another version of this script which supported more games, but it's currently lost...)
 
 `PokemonORAS_BCH` (10/26/2016)
 - Pokémon Omega Ruby / Alpha Sapphire [3DS]
+
 (This script is kinda hackishly-done, so don't expect everything to work.)
 
 `PokemonSwitch_GFBMDL-TRMDL` (11/27/2022)
@@ -154,6 +157,7 @@
 - Sonic Unleashed [Wii]
 - Super Monkey Ball: Banana Blitz [Wii]
 - Super Monkey Ball: Step and Roll [Wii]
+
 (I had another version of this script which supported more games, but it's currently lost...)
 
 `SSB4U-TaikoU_NDP3` (05/04/2017)
@@ -208,6 +212,7 @@
 - The Walking Dead: The Telltale Definitive Series [PC]
 - The Wolf Among Us [PC / PS4]
 - Wallace and Gromit's Grand Adventures, Episodes 1-3 [PC]
+
 (This script also requires the "TelltaleHashDBs" folder to be placed in your 3DS Max's `scripts` folder for it to work as intended.)
 
-("_2012" is a temporary bugfix version if rigging is broken and "Debug" is a version where extra stuff is printed to the Listener window, those will eventually be obsoleted the next time the respective scripts are updated. These things are ancient, yo.)
+"_2012" is a temporary bugfix version if rigging is broken and "Debug" is a version where extra stuff is printed to the Listener window, those will eventually be obsoleted the next time the respective scripts are updated. These things are ancient, yo.
