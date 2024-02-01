@@ -83,6 +83,7 @@
 - Mario Party Superstars [Switch]
 - Mario Tennis Aces [Switch]
 - Mario Tennis: Ultra Smash [Wii U]
+- Mario vs. Donkey Kong [Switch]
 - Miitopia [Switch]
 - New Super Mario Bros. U / New Super Luigi U [Wii U]
 - New Super Mario Bros. U Deluxe [Switch]
