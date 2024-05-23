@@ -94,6 +94,7 @@
 - Nintendo Land [Wii U]
 - Nintendo Switch Sports [Switch]
 - Paper Mario: The Origami King [Switch]
+- Paper Mario: The Thousand-Year Door [Switch]
 - Pikmin 3 [Wii U]
 - Pikmin 3 Deluxe [Switch]
 - Pokémon Rumble U [Wii U]
