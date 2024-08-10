@@ -93,6 +93,7 @@
 - Nintendo Labo 04: VR Kit [Switch]
 - Nintendo Land [Wii U]
 - Nintendo Switch Sports [Switch]
+- Nintendo World Championships: NES Edition [Switch]
 - Paper Mario: The Origami King [Switch]
 - Paper Mario: The Thousand-Year Door [Switch]
 - Pikmin 3 [Wii U]
