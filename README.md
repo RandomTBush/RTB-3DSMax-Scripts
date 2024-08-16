@@ -202,8 +202,9 @@
 - Poker Night 2 [PC]
 - Sam & Max Season 1 [PC]
 - Sam & Max Season 2 [PC]
-- Sam & Max Save the World (Season 1) Remastered [PC]
-- Sam & Max Beyond Time and Space (Season 2) Remastered [PC]
+- Sam & Max Save the World (Season 1) Remastered [PC] (key for TTArchExt: 92CA9A8185E46473A2BFD6D17FC6CB88995A80D8AAC297E796519FA89AD9AE95D776627FB4C4A6B9D6ECA99C6785B3DC92C49E64A0A292)
+- Sam & Max Beyond Time and Space (Season 2) Remastered [PC] (key for TTArchExt: 92CA9A8185E46573A2BFD6D17FC6CB89995A80D8AAC297E797519FA89AD9AE95D777627FB4C4A6B9D6ECAA9C6785B3DC92C49E65A0A292)
+- Sam & Max The Devil's Playhouse (Season 3) Remastered [PC] (key for TTArchExt: 92CA9A8185E46673A2BFD6D17FC6CB8A995A80D8AAC297E798519FA89AD9AE95D778627FB4C4A6B9D6ECAB9C6785B3DC92C49E66A0A292)
 - Strong Bad's Cool Game for Attractive People [PC]
 - Tales from the Borderlands [PC / PS4]
 - Telltale Texas Hold'em [PC]
