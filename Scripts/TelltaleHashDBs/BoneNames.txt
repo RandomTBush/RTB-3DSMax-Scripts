@@ -352,6 +352,7 @@ antenna_R
 antennaA
 antennaB
 antennaBase
+antennaBroken
 antennae1_L
 antennae1_R
 antennae2_L
@@ -516,12 +517,14 @@ armLower_L
 armLower_R
 armLowerBack
 armLowerFront
+armMass
 armMid_L
 armMid_R
 arms_L
 arms_R
 armsFront
 armSwivel
+armTendons
 armTop
 armTop_L
 armTop_R
@@ -664,6 +667,7 @@ b5
 b6
 b7
 b8
+b_root
 baby_browInner_L
 baby_browInner_R
 baby_browOuter_L
@@ -743,6 +747,7 @@ back_L
 back_R
 background
 backMidPiston
+backOpen
 backpack
 backpack1
 backpack2
@@ -756,6 +761,7 @@ backPage1
 backPage2
 backPage3
 backPage4
+backPannel
 backPin_L
 backPin_R
 backPiston
@@ -834,6 +840,7 @@ ball3_R
 ball_L
 ball_R
 ballBase
+ballHolder
 ballIK_L
 ballIK_R
 balloon
@@ -841,6 +848,7 @@ balloon1
 balloon2
 balloonDeform
 balloons
+ballSupport
 ballTip
 bandage1
 bandage2
@@ -980,6 +988,7 @@ barney_temple_L
 barney_temple_R
 barney_tongue
 barney_tongueTip
+barometerLittle
 barPieceA
 barPieceB
 barPieceC
@@ -995,6 +1004,7 @@ barrelB
 barrelCenter
 barrelHinge
 barrelLock
+barrelPivot
 barrelRotate
 barrels
 barricade
@@ -1015,6 +1025,7 @@ baseA
 baseArm
 baseB
 baseballBat
+baseBaton
 baseBook
 baseBottom
 baseC
@@ -1294,6 +1305,7 @@ bendB
 bendBack
 bendBottom
 bendC
+bendCorner
 bendEnd
 bendFront
 bendTop
@@ -1724,6 +1736,12 @@ bloodyMary_nose_R
 bloodyMary_tongue
 bluebeard_glasses
 board
+board1_L
+board1_R
+board2_L
+board2_R
+board3_L
+board3_R
 boardA
 boardB
 boardBase
@@ -1748,6 +1766,7 @@ bodyE
 bodyF
 bodyFront
 bodyG
+bodyTendon
 bodyTrailer
 bolaWrapA
 bolaWrapB
@@ -1758,6 +1777,7 @@ bomberFront
 bones
 bongo_L
 bongo_R
+bongosBase
 bonnie_hair1
 book1
 book2
@@ -1839,6 +1859,8 @@ boulderRopeB
 boulderRopeC
 boulderRopeD
 bounce
+bowBottom1
+bowBottom2
 bowLeft
 bowLeft1
 bowRight
@@ -1847,6 +1869,8 @@ bowString
 bowTie
 bowTie_L
 bowTie_R
+bowTop1
+bowTop2
 box
 boxBottom_L
 boxBottom_R
@@ -1946,6 +1970,8 @@ brainBack_L
 brainBack_R
 brainFront_L
 brainFront_R
+brainLobe_L
+brainLobe_R
 brainRoot
 brainSide_L
 brainSide_R
@@ -2300,6 +2326,7 @@ buttonC
 buttonCover
 buttonD
 buttonFF
+buttonHinge
 buttonHousing
 buttonOff
 buttonOn
@@ -2309,6 +2336,7 @@ buttonRec
 buttonRew
 buttonSide
 buttonTop
+buttonTwist
 buttonVolume
 c
 c1
@@ -3008,6 +3036,7 @@ champion502_tongue_LS
 chandelierPivot
 chandelierSwing
 chapel
+chargingHandle
 charlieHotep_browInner_L
 charlieHotep_browInner_R
 charlieHotep_browOuter_L
@@ -3284,6 +3313,14 @@ claw1_L
 claw1_R
 claw2_L
 claw2_R
+claw2Lower1_L
+claw2Lower1_R
+claw2Lower2_L
+claw2Lower2_R
+claw2Upper1_L
+claw2Upper1_R
+claw2Upper2_L
+claw2Upper2_R
 claw3_L
 claw3_R
 claw4_L
@@ -4126,6 +4163,10 @@ crookedMan_mouthUpperOuter_R
 crookedMan_nose_L
 crookedMan_nose_R
 crookedMan_tongue
+crossbow_L1
+crossbow_L2
+crossbow_R1
+crossbow_R2
 crossbowString
 crowCrooked_face
 crowCrooked_jaw
@@ -4575,6 +4616,16 @@ deSinge_cheek_L
 deSinge_cheek_R
 deSinge_cheekUpper_L
 deSinge_cheekUpper_R
+deSinge_coatTailBack_L
+deSinge_coatTailBack_R
+deSinge_coatTailFront_L
+deSinge_coatTailFront_R
+deSinge_coatTailUpperFront_L
+deSinge_coatTailUpperFront_R
+deSinge_collar_L
+deSinge_collar_R
+deSinge_curl_L
+deSinge_curl_R
 deSinge_eye_L
 deSinge_eye_R
 deSinge_eyeLidLower_L
@@ -5118,6 +5169,7 @@ doorB_R
 doorBack
 doorBack_L
 doorBack_R
+doorBackHandle
 doorBHeliosOffice
 doorBottom
 doorBottom_L
@@ -5134,19 +5186,23 @@ doorFront2_R
 doorFront3_R
 doorFront_L
 doorFront_R
+doorFrontBar
 doorFrontHandle
 doorFrontLeft
+doorFrontOpen
 doorFrontRight
 doorHandle
 doorHandleA
 doorHandleB
 doorHeart
 doorHinge
+doorIn
 doorL
 doorLeft
 doorLock
 doorLower
 doorMidRight
+doorOven
 doorPanel1
 doorPanel2
 doorPanel3
@@ -5167,6 +5223,7 @@ doorRoof
 doorRoofHinge1
 doorRoofHinge2
 doorRoofHinge3
+doorRot
 doorSide
 doorSide1_L
 doorSide1_R
@@ -5635,6 +5692,7 @@ elf_tongue_LS
 end
 end_L
 end_R
+endBaton
 endLeg_L
 endLeg_R
 engine
@@ -5756,6 +5814,7 @@ eyeball_retract
 eyeBlue
 eyeCornerOuter_L
 eyeCornerOuter_R
+eyeholeCover
 eyeLens
 eyeLid1
 eyeLid2
@@ -5820,6 +5879,8 @@ eyelight_aimjoint
 eyeLower_L
 eyeLower_R
 eyeMiddle
+eyeOuter_L
+eyeOuter_R
 eyePivot_L
 eyePivot_R
 eyeProtrusion1_L
@@ -5841,6 +5902,8 @@ eyesUpper_L
 eyesUpper_L_LS
 eyesUpper_R
 eyesUpper_R_LS
+eyeUpper_L
+eyeUpper_R
 eyeUpperInner_L
 eyeUpperInner_R
 eyeUpperMiddle_L
@@ -5980,6 +6043,7 @@ ferryman_eyeOuter_L
 ferryman_eyeOuter_R
 ferryman_eyeUpper_L
 ferryman_eyeUpper_R
+ferryman_neck2
 fez
 fileTop
 fin_L
@@ -6139,6 +6203,8 @@ flap7
 flap8
 flap8_L
 flap8_R
+flap_B
+flap_F
 flap_L
 flap_R
 flapA
@@ -6236,6 +6302,7 @@ floatyA
 floatyB
 floatyC
 floatyD
+floorBase
 flop1
 flop1_L
 flop1_R
@@ -6291,6 +6358,8 @@ flycatcher_mouthUpperOuter_R
 flycatcher_nose_L
 flycatcher_nose_R
 flycatcher_tongue
+fogBackground
+fogForeground
 fold
 fold1
 fold2
@@ -6398,8 +6467,10 @@ front_R
 frontBumper
 frontDoor_L
 frontDoor_R
+frontDrawer
 frontFeet
 frontMidPiston
+frontOpen
 frontPage1
 frontPage2
 frontPage3
@@ -7471,6 +7542,10 @@ guybrush_cheek_L
 guybrush_cheek_R
 guybrush_cheekUpper_L
 guybrush_cheekUpper_R
+guybrush_coatTailBack_L
+guybrush_coatTailBack_R
+guybrush_coatTailFront_L
+guybrush_coatTailFront_R
 guybrush_eye_L
 guybrush_eye_R
 guybrush_eyeLidLower_L
@@ -7479,6 +7554,8 @@ guybrush_eyeLidUpper_L
 guybrush_eyeLidUpper_R
 guybrush_eyePivot_L
 guybrush_eyePivot_R
+guybrush_hairUpper1
+guybrush_hairUpper2
 guybrush_jaw
 guybrush_mouthCorner_L
 guybrush_mouthCorner_R
@@ -7622,6 +7699,7 @@ handle_lower
 handle_R
 handle_upper
 handleA
+handleAim
 handleB
 handleBack
 handlebars
@@ -7925,6 +8003,7 @@ hingeGun
 hingeGunBottom
 hinges
 hingeTop
+hitchBase
 holly_adamsApple
 holly_browCenter_L
 holly_browCenter_R
@@ -8070,6 +8149,7 @@ homsar_snout
 honeyGun
 honeyGunColumn
 honeyGunHandle
+honeyGunPivot
 hood
 hood_L
 hood_R
@@ -8115,6 +8195,7 @@ hose5_L
 hose5_R
 hose6_L
 hose6_R
+hoseAim
 hoseCrimp
 hoseLower_L
 hoseLower_R
@@ -9135,6 +9216,7 @@ kingOfTown_mustache_L_LS
 kingOfTown_mustache_R
 kingOfTown_mustache_R_LS
 kingOfTownPerducci_glasses
+kitchenDrawer
 knee
 knee1_L
 knee1_R
@@ -9197,6 +9279,7 @@ lamp_L
 lamp_R
 lampCenter
 lantern
+lapBar
 laptopA
 laptopB
 larry_browCenter_L
@@ -9383,6 +9466,9 @@ leather
 leaves
 leaves1
 leaves2
+leChuckDemon_beard1
+leChuckDemon_beard2
+leChuckDemon_beard3
 leChuckDemon_browInner_L
 leChuckDemon_browInner_R
 leChuckDemon_browOuter_L
@@ -9391,6 +9477,10 @@ leChuckDemon_cheekUpperInner_L
 leChuckDemon_cheekUpperInner_R
 leChuckDemon_cheekUpperOuter_L
 leChuckDemon_cheekUpperOuter_R
+leChuckDemon_coatTailBack_L
+leChuckDemon_coatTailBack_R
+leChuckDemon_coatTailFront_L
+leChuckDemon_coatTailFront_R
 leChuckDemon_eyeInner_L
 leChuckDemon_eyeInner_R
 leChuckDemon_eyeLower_L
@@ -9399,6 +9489,9 @@ leChuckDemon_eyeOuter_L
 leChuckDemon_eyeOuter_R
 leChuckDemon_eyeUpper_L
 leChuckDemon_eyeUpper_R
+leChuckDemon_featherA
+leChuckDemon_featherB
+leChuckDemon_featherC
 leChuckDemon_hat
 leChuckDemon_jaw
 leChuckDemon_mouthCorner_L
@@ -9437,6 +9530,7 @@ leChuckHuman_eyeLidUpper_L
 leChuckHuman_eyeLidUpper_R
 leChuckHuman_eyePivot_L
 leChuckHuman_eyePivot_R
+leChuckHuman_feather
 leChuckHuman_jaw
 leChuckHuman_mouthCorner_L
 leChuckHuman_mouthCorner_R
@@ -9513,6 +9607,7 @@ legA
 legA1
 legA2
 legA3
+legATip
 legB
 legBack1_L
 legBack1_R
@@ -9535,7 +9630,9 @@ legBackC1
 legBackC2
 legBackC3
 legBottom_R
+legBTip
 legC
+legCTip
 legFront1_L
 legFront1_R
 legFront2_L
@@ -9682,6 +9779,7 @@ lever_L
 lever_R
 leverA
 leverB
+leverDash
 leverFuelMixture
 leverHoneyGun
 leverLeft
@@ -9838,6 +9936,7 @@ liquid
 liquidBase
 liquidE
 liquidN
+liquidPivot
 liquidS
 liquidTop
 liquidW
@@ -10005,6 +10104,8 @@ maggot4
 mailSlot
 main
 mainBody
+mainKey
+mainKeySwing
 mainRotor
 mainSailPivot
 makeup
@@ -10331,6 +10432,54 @@ maxMonster_mouthUpperOuter_L
 maxMonster_mouthUpperOuter_L_LS
 maxMonster_mouthUpperOuter_R
 maxMonster_mouthUpperOuter_R_LS
+maxMonster_tentacleInner1_L
+maxMonster_tentacleInner1_L_LS
+maxMonster_tentacleInner1_R
+maxMonster_tentacleInner1_R_LS
+maxMonster_tentacleInner2_L
+maxMonster_tentacleInner2_L_LS
+maxMonster_tentacleInner2_R
+maxMonster_tentacleInner2_R_LS
+maxMonster_tentacleInner3_L
+maxMonster_tentacleInner3_L_LS
+maxMonster_tentacleInner3_R
+maxMonster_tentacleInner3_R_LS
+maxMonster_tentacleInner4_L
+maxMonster_tentacleInner4_L_LS
+maxMonster_tentacleInner4_R
+maxMonster_tentacleInner4_R_LS
+maxMonster_tentacleMiddle1_L
+maxMonster_tentacleMiddle1_L_LS
+maxMonster_tentacleMiddle1_R
+maxMonster_tentacleMiddle1_R_LS
+maxMonster_tentacleMiddle2_L
+maxMonster_tentacleMiddle2_L_LS
+maxMonster_tentacleMiddle2_R
+maxMonster_tentacleMiddle2_R_LS
+maxMonster_tentacleMiddle3_L
+maxMonster_tentacleMiddle3_L_LS
+maxMonster_tentacleMiddle3_R
+maxMonster_tentacleMiddle3_R_LS
+maxMonster_tentacleMiddle4_L
+maxMonster_tentacleMiddle4_L_LS
+maxMonster_tentacleMiddle4_R
+maxMonster_tentacleMiddle4_R_LS
+maxMonster_tentacleOuter1_L
+maxMonster_tentacleOuter1_L_LS
+maxMonster_tentacleOuter1_R
+maxMonster_tentacleOuter1_R_LS
+maxMonster_tentacleOuter2_L
+maxMonster_tentacleOuter2_L_LS
+maxMonster_tentacleOuter2_R
+maxMonster_tentacleOuter2_R_LS
+maxMonster_tentacleOuter3_L
+maxMonster_tentacleOuter3_L_LS
+maxMonster_tentacleOuter3_R
+maxMonster_tentacleOuter3_R_LS
+maxMonster_tentacleOuter4_L
+maxMonster_tentacleOuter4_L_LS
+maxMonster_tentacleOuter4_R
+maxMonster_tentacleOuter4_R_LS
 maxMonster_tongue
 maxMonster_tongue_LS
 maxV2_browInner_L
@@ -10519,6 +10668,7 @@ microphoneStand
 mid
 midA
 midB
+midBaton
 midC
 midD
 middle
@@ -10981,6 +11131,7 @@ morgan_mouthUpperOuter_R
 morgan_mouthUpperOuter_R_LS
 morgan_nose
 morgan_nose_LS
+morgan_pauldron
 morgan_tongue
 morgan_tongue_LS
 mosasaur_browInner_L
@@ -11659,6 +11810,19 @@ norrington_tentacleC3_L
 norrington_tentacleC3_R
 norrington_tentacleC4_L
 norrington_tentacleC4_R
+norrington_tentacleMid1
+norrington_tentacleMid2
+norrington_tentacleMid3
+norrington_tentacleMid4
+norrington_tentacleMid5
+norrington_tentacleMid6
+norrington_tentacleMid7
+norrington_tentacleUpper1_L
+norrington_tentacleUpper1_R
+norrington_tentacleUpper2_L
+norrington_tentacleUpper2_R
+norrington_tentacleUpper3_L
+norrington_tentacleUpper3_R
 nose
 nose_L
 nose_L_LS
@@ -12129,6 +12293,8 @@ panSmallPivot
 pantCuff_L
 pantCuff_R
 pants
+pantsLeg_L
+pantsLeg_R
 paper1
 paper2
 paperA
@@ -12167,6 +12333,11 @@ papierWaite_mouthUpperOuter_L
 papierWaite_mouthUpperOuter_R
 papierWaite_nose
 papierWaite_tongue
+papierWaiteNorrington_tie1
+papierWaiteNorrington_tie2
+papierWaiteNorrington_tie3
+papierWaiteNorrington_tie4
+papierWaiteNorrington_tie5
 parasaurolophus_browInner_L
 parasaurolophus_browInner_R
 parasaurolophus_browOuter_L
@@ -12231,6 +12402,7 @@ partE
 partF
 partG
 partH
+passengerSeat
 patient503_browInner_L
 patient503_browInner_R
 patient503_browOuter_L
@@ -12322,6 +12494,14 @@ pen
 pendant
 pendulum
 periscope
+peristalsis1
+peristalsis2
+peristalsis3
+peristalsis4
+peristalsis5
+peristalsis6
+peristalsis7
+peristalsis8
 petal1A
 petal1B
 petal1C_L
@@ -12580,6 +12760,7 @@ pipeE1
 pipeE2
 pipeE3
 pipeTop
+pirateA_bandana
 pirateA_browInner_L
 pirateA_browInner_R
 pirateA_browOuter_L
@@ -12610,6 +12791,8 @@ pirateA_mouthUpperOuter_L
 pirateA_mouthUpperOuter_R
 pirateA_nose
 pirateA_tongue
+pirateACrimpDigitMasked_mask
+pirateAMoose_bandana
 pirateB_browInner_L
 pirateB_browInner_R
 pirateB_browOuter_L
@@ -13005,6 +13188,7 @@ prudence_mouthUpperInner_R
 prudence_mouthUpperOuter_L
 prudence_mouthUpperOuter_R
 prudence_nose
+prudence_skirt
 prudence_teethLower
 prudence_teethUpper
 prudence_tongue
@@ -13031,6 +13215,8 @@ pteranodon_tongue4
 pteranodon_tongue4_LS
 pteranodon_tongue_LS
 PTTButton
+puffBottomA
+puffBottomB
 puffTop
 puffTopA
 puffTopB
@@ -13270,6 +13456,7 @@ rack6
 rack7
 rack8
 radar
+radioKnob
 rag
 rail
 rail0_L
@@ -13430,6 +13617,7 @@ rear
 rearDoor
 rearPiece_L
 rearPiece_R
+rearViewMirror
 rearWheel
 rearWheelSpin
 rearWindow
@@ -13474,6 +13662,7 @@ recordC
 recordChunkA
 recordChunkB
 recordChunkC
+recordPlayer
 redstoneMachineCowapult
 reel_L
 reel_R
@@ -14081,6 +14270,8 @@ root6
 root7
 root8
 rootBaby
+rootMesh
+rootTrailer
 rope
 rope01
 rope02
@@ -14252,6 +14443,18 @@ sal_eyeLidUpper_R
 sal_eyePivot_L
 sal_eyePivot_R
 sal_hat
+sal_pincer1_L
+sal_pincer1_L_LS
+sal_pincer1_R
+sal_pincer1_R_LS
+sal_pincer2_L
+sal_pincer2_L_LS
+sal_pincer2_R
+sal_pincer2_R_LS
+sal_pincer3_L
+sal_pincer3_L_LS
+sal_pincer3_R
+sal_pincer3_R_LS
 sal_snout
 sALeafA
 sALeafB
@@ -15006,6 +15209,7 @@ shell_L
 shell_R
 shellA
 shellB
+shellHinge
 shells
 shellTop
 sheriff605_adamsApple
@@ -15194,6 +15398,7 @@ skeleton_browInner_R
 skeleton_browOuter_L
 skeleton_browOuter_R
 skeleton_jaw
+skeletonRoot
 skin1
 skin2
 skinFlap
@@ -15770,6 +15975,10 @@ stan_cheek_L
 stan_cheek_R
 stan_cheekUpper_L
 stan_cheekUpper_R
+stan_coatTailBack_L
+stan_coatTailBack_R
+stan_coatTailFront_L
+stan_coatTailFront_R
 stan_eye_L
 stan_eye_R
 stan_eyeLidLower_L
@@ -15797,6 +16006,7 @@ stan_mouthUpperInner_R
 stan_mouthUpperOuter_L
 stan_mouthUpperOuter_R
 stan_nose
+stan_tie
 stan_tongue
 stand
 star
@@ -15869,6 +16079,7 @@ stepSon504_nose
 stepSon504_nose_LS
 stepSon504_tongue
 stepSon504_tongue_LS
+stetchUpper
 stick
 stickshift
 stiddy
@@ -16059,7 +16270,11 @@ strapTop5
 strapTop6
 strapTop7
 straw
+strawBase
 strawBend
+strawTip
+streamBase
+streamEnd
 stretch
 stretch01
 stretch02
@@ -16084,6 +16299,7 @@ string4
 string5
 stringMiddle
 strings
+stripBase
 stripper501_browInner_L
 stripper501_browInner_R
 stripper501_browOuter_L
@@ -16129,6 +16345,7 @@ stripper501_nose
 stripper501_nose_LS
 stripper501_tongue
 stripper501_tongue_LS
+stripTip
 strongbad_eyes
 strongbad_jaw
 strongbad_lace
@@ -16269,6 +16486,8 @@ sybil_nose
 sybil_tongue
 tableFlap_L
 tableFlap_R
+tableHinge
+tablePivot
 tableTop
 tachometer
 tag
@@ -16861,6 +17080,7 @@ thumb1_L
 thumb1_R
 thumb1Broken_L
 thumb1Front_L
+thumb1Front_R1
 thumb1Lower_L
 thumb1Lower_R
 thumb2
@@ -17004,6 +17224,8 @@ toddlerEarhart_eyeLidUpper_L
 toddlerEarhart_eyeLidUpper_R
 toddlerEarhart_eyePivot_L
 toddlerEarhart_eyePivot_R
+toddlerEarhart_hairTuft_L
+toddlerEarhart_hairTuft_R
 toddlerEarhart_jaw
 toddlerEarhart_mouthCorner_L
 toddlerEarhart_mouthCorner_R
@@ -17110,6 +17332,8 @@ trail6
 trail7
 trail8
 trail9
+trailerHinge
+trailerTwist
 trainBody
 transform1
 transform2
@@ -17378,6 +17602,11 @@ turntableB
 turret
 turretGun
 turretMain
+tvBack
+tvBase
+tvFrame
+tvSide
+tvTube
 twistHandle
 two
 tycho_browInner_L
@@ -17670,6 +17899,8 @@ vestUpper_L
 vestUpper_R
 vialBottom_L
 vialBottom_R
+vialCover
+vialHolder
 vialTop_L
 vialTop_R
 victim603_adamsApple
@@ -17995,6 +18226,8 @@ voodooLady_cheek_L
 voodooLady_cheek_R
 voodooLady_cheekUpper_L
 voodooLady_cheekUpper_R
+voodooLady_earring_L
+voodooLady_earring_R
 voodooLady_eye_L
 voodooLady_eye_R
 voodooLady_eyeLidLower_L
@@ -18230,6 +18463,7 @@ wheelsB_R
 wheelsC
 wheelsC_L
 wheelsC_R
+wheelsCabFront_L
 wheelsD
 wheelsD_L
 wheelsD_R
@@ -18249,6 +18483,14 @@ wheelsSpinE_L
 wheelsSpinE_R
 wheelsSpinF_L
 wheelsSpinF_R
+wheelTrailerFront_L
+wheelTrailerFront_R
+wheelTrailerFrontSpin_L
+wheelTrailerFrontSpin_R
+wheelTrailerRear_L
+wheelTrailerRear_R
+wheelTrailerRearSpin_L
+wheelTrailerRearSpin_R
 wheelUpper_L
 wheelUpper_R
 whip
