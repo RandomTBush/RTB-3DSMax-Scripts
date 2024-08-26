@@ -65,6 +65,7 @@
 - Captain Toad: Treasure Tracker [Wii U / Switch]
 - Club House Games: 51 Worldwide Classics / 51 Worldwide Games [Switch]
 - Disney Magical World 2: Enchanted Edition [Switch]
+- Endless Ocean: Luminous [Switch]
 - Everybody 1-2-Switch! [Switch]
 - F-Zero 99 [Switch]
 - Game & Wario [Wii U]
