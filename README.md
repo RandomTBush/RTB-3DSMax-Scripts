@@ -120,6 +120,7 @@
 - Tank! Tank! Tank! [Wii U]
 - Tetris 99 [Switch]
 - The Legend of Zelda: Breath of the Wild [Wii U / Switch]
+- The Legend of Zelda: Echoes of Wisdom [Switch]
 - The Legend of Zelda: Link's Awakening [Switch]
 - The Legend of Zelda: Tears of the Kingdom [Switch]
 - The Legend of Zelda: Wind Waker HD [Wii U]
