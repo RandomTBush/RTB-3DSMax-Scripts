@@ -115,6 +115,7 @@
 - Super Mario Maker 2 [Switch]
 - Super Mario Odyssey [Switch]
 - Super Mario Party [Switch]
+- Super Mario Party Jamboree [Switch]
 - Super Smash Bros. Ultimate (effect files only!) [Switch]
 - Sushi Striker: The Way of Sushido [Switch]
 - Tank! Tank! Tank! [Wii U]
