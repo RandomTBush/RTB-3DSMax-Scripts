@@ -1,9 +1,99 @@
--- Importer for Wii U / Switch BFRES files seen in many Nintendo games. 
+-- Nintendo Wii U / Nintendo Switch - BFRES Importer
+-- --------------------------------------------------
 -- Written by ItsEasyActually and Random Talking Bush (with some help from Ploaj for 10-bit normal values, and Sylk for optimizations [which I've probably broken by now, sorry!], and assistance in general).
 -- Credit to the tockdom wiki community for the format documention
 -- Special thanks to TGE for help early on with new scripting methods and getting ItsEasyActually started
-
+-- --------------------------------------------------
+-- Works with the following (known) Wii U games:
+-- --------------------------------------------------
+-- Animal Crossing Plaza
+-- Captain Toad: Treasure Tracker
+-- Game & Wario
+-- Kirby and the Rainbow Curse
+-- The Legend of Zelda: Breath of the Wild
+-- The Legend of Zelda: Wind Waker HD
+-- Mario & Sonic at the Sochi 2014 Olympic Winter Games
+-- Mario Kart 8
+-- Mario Tennis: Ultra Smash
+-- New Super Mario Bros. U / New Super Luigi U
+-- Nintendo Land
+-- Pikmin 3
+-- Pokémon Rumble U
+-- Pushmo World
+-- Rodea: The Sky Soldier
+-- Splatoon
+-- Super Mario 3D World
+-- Super Mario Maker
+-- Tank! Tank! Tank!
+-- Tokyo Mirage Sessions #FE
+-- Wii Sports Club
+-- Wii U BIOS
+-- Yoshi's Woolly World
+-- --------------------------------------------------
+-- Works with the following (known) Nintendo Switch games:
+-- --------------------------------------------------
+-- 1-2-Switch
+-- Animal Crossing: New Horizons
+-- ARMS
+-- Brain Age / Dr. Kawashima's Brain Training
+-- Captain Toad: Treasure Tracker
+-- Club House Games: 51 Worldwide Classics / 51 Worldwide Games
+-- Disney Magical World 2: Enchanted Edition
+-- Endless Ocean: Luminous
+-- Everybody 1-2-Switch!
+-- F-Zero 99
+-- Game Builder Garage
+-- Go Vacation
+-- Kirby and the Forgotten Land
+-- Kirby Fighters 2
+-- Kirby's Dream Buffet
+-- Kirby's Return to Dream Land Deluxe
+-- Kirby: Star Allies
+-- Mario Golf: Super Rush
+-- Mario Kart 8 Deluxe
+-- Mario Party Superstars
+-- Mario Tennis Aces
+-- Mario vs. Donkey Kong
+-- Miitopia
+-- New Super Mario Bros. U Deluxe
+-- Nintendo Labo 01: Variety Kit
+-- Nintendo Labo 02: Robot Kit (somewhat, main game models use a different format)
+-- Nintendo Labo 03: Vehicle Kit
+-- Nintendo Labo 04: VR Kit
+-- Nintendo Switch Sports
+-- Nintendo World Championships: NES Edition
+-- Paper Mario: The Origami King
+-- Paper Mario: The Thousand-Year Door
+-- Pikmin 3 Deluxe
+-- Ring Fit Adventure
+-- Rune Factory 4 Special
+-- Splatoon 2
+-- Splatoon 3
+-- Super Kirby Clash
+-- Super Mario 3D World + Bowser's Fury
+-- Super Mario Bros. Wonder
+-- Super Mario Maker 2
+-- Super Mario Odyssey
+-- Super Mario Party
+-- Super Mario Party Jamboree
+-- Super Smash Bros. Ultimate [effect files only!]
+-- Sushi Striker: The Way of Sushido
+-- Tetris 99
+-- The Legend of Zelda: Breath of the Wild
+-- The Legend of Zelda: Echoes of Wisdom
+-- The Legend of Zelda: Link's Awakening
+-- The Legend of Zelda: Tears of the Kingdom
+-- Tokyo Mirage Sessions #FE Encore
+-- Vroom in the Night Sky
+-- WarioWare: Get It Together!
+-- WarioWare: Move It!
+-- --------------------------------------------------
 -- Changelog:
+-- October 18, 2024:
+-- Added support for models with additional vertex position sets (Super Mario Party Jamboree character faces).
+-- Fixed UVs not working with Super Mario Party Jamboree models.
+-- Fixed yet another vertex colour calculation issue with Switch models (e.g. Fire Rosalina's skirt being darker than it should be in SM3DW+BF).
+
 -- September 19, 2022:
 -- Added support for Version 10 models (e.g. Splatoon 3). Material parameters do not currently output to the Listener, and will be looked into sometime later.
 -- Replaced the "mod" calculation with "bit.and" to fix a vertex buffer alignment issue (e.g. 2 was being rounded up to 4, breaking things in the process).
@@ -99,6 +189,7 @@
 -- Added UV mapping support for type 516 (bytes), might be incorrect.
 -- Not a fix, but UV mapping type 2056 is currently incorrect and will need to be looked into later.
 -- Likewise, normals will be looked into for the next update.
+-- --------------------------------------------------
 
 rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 (
@@ -119,26 +210,26 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 	checkbox tglMatInfo "Print material info?" pos:[8,BFRESImporter.height-20] width:115
 	checkbox tglDebug "Print debug info?" pos:[158,BFRESImporter.height-20] width:105
-	label lblUpdate "(Updated 09/19/2022)" pos:[BFRESImporter.width-115,BFRESImporter.height-19] width:110
+	label lblUpdate "(Updated 10/28/2024)" pos:[BFRESImporter.width-115,BFRESImporter.height-19] width:110
 
 	local FMDLOffset_array = #()
 	local f = #()
 	local p = #()
 	local sf = #()
 
-	fn ReadOffset fstream = ((ftell fstream) + (bit.swapBytes (bit.swapBytes (readlong fstream #unsigned) 1 4) 2 3))
-	fn readBEshort fstream = (bit.swapBytes (readshort fstream #unsigned) 1 2)
-	fn readBElong fstream = (bit.swapBytes (bit.swapBytes (readlong fstream #unsigned) 1 4) 2 3)
-	fn readBEfloat fstream = (bit.intAsFloat (bit.swapBytes (bit.swapBytes (readlong fstream #unsigned) 1 4) 2 3))
+	fn ReadOffset fstream = ((ftell fstream) + (bit.swapBytes (bit.swapBytes (ReadLong fstream #unsigned) 1 4) 2 3))
+	fn ReadBEShort fstream = (bit.swapBytes (ReadShort fstream #unsigned) 1 2)
+	fn ReadBELong fstream = (bit.swapBytes (bit.swapBytes (ReadLong fstream #unsigned) 1 4) 2 3)
+	fn readBEfloat fstream = (bit.intAsFloat (bit.swapBytes (bit.swapBytes (ReadLong fstream #unsigned) 1 4) 2 3))
 
 	fn ReadBEHalfFloat Fstream = (
-		local BH = readByte Fstream #unsigned
-		local BL = readByte Fstream #unsigned
+		local BH = ReadByte Fstream #unsigned
+		local BL = ReadByte Fstream #unsigned
 		local N = BH*256 + BL
 		local S = floor((mod N 65536) / 32768)
 		local Ef = floor((mod N 32768) / 1024)
 		local M = mod N 1024
-		local ret=case of(
+		local ret=case of (
 			((Ef==0)AND(M==0)): ( (-1.0)^S * 0.0 )
 			((Ef==0)AND(M!=0)): ( (-1.0)^S * 2.0^-14 * (M / 2.0^10) )
 			((Ef>0)AND(Ef<31)): ( (-1.0)^S * 2.0^(Ef-15) * (1 + M/2.0^10) )
@@ -148,13 +239,13 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 	)
 
 	fn ReadHalfFloat Fstream = (
-		local BL = readByte Fstream #unsigned
-		local BH = readByte Fstream #unsigned
+		local BL = ReadByte Fstream #unsigned
+		local BH = ReadByte Fstream #unsigned
 		local N = BH*256 + BL
 		local S = floor((mod N 65536) / 32768)
 		local Ef = floor((mod N 32768) / 1024)
 		local M = mod N 1024
-		local ret=case of(
+		local ret=case of (
 			((Ef==0)AND(M==0)): ( (-1.0)^S * 0.0 )
 			((Ef==0)AND(M!=0)): ( (-1.0)^S * 2.0^-14 * (M / 2.0^10) )
 			((Ef>0)AND(Ef<31)): ( (-1.0)^S * 2.0^(Ef-15) * (1 + M/2.0^10) )
@@ -164,7 +255,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 	)
 
 	fn sign10 x = (
-		if (bit.shift x -9) == 1 do(
+		if (bit.shift x -9) == 1 do (
 			x = bit.not x
 			x = bit.and x 0x3FF
 			x += 1
@@ -182,7 +273,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 	fn printDebug pr = (if tglDebug.state do print(pr))
 		
 	fn vRange Lo Hi val = (
-		val=case of(
+		val=case of (
 			(val>Hi):Hi
 			(val<Lo):Lo
 			default:val
@@ -194,7 +285,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 		-- Disabling this as it was causing path/extension changes to not get acknowledged on subsequent loads.
 		-- for sm in sceneMaterials where sm.name == matName do PolyMat = sm
 
-		if PolyMat == undefined do(
+		if PolyMat == undefined do (
 			PolyMat = standardMaterial name:(matName as string) showInViewport:true twoSided:false
 			fseek f tSelOff#seek_set
 			printDebug(PolyMat.name + " uses the following textures:")
@@ -208,7 +299,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 			RtnTexAS2 = RtnTexAS
 
-			for t = 1 to tCount do(
+			for t = 1 to tCount do (
 				TexSelNameOffset = ReadOffset f
 				FTEXPos = ReadOffset f
 				RtnTexSel = ftell f
@@ -217,19 +308,19 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 				TexSelName = readstring f
 
 				fseek f RtnTexAS#seek_set
-				TexAttSelUnk1 = readlong f #unsigned
-				TexAttSelUnk2 = readlong f #unsigned
-				TexAttSelUnk3 = readlong f #unsigned
-				TexAttSelUnk4 = readlong f #unsigned
+				TexAttSelUnk1 = ReadLong f #unsigned
+				TexAttSelUnk2 = ReadLong f #unsigned
+				TexAttSelUnk3 = ReadLong f #unsigned
+				TexAttSelUnk4 = ReadLong f #unsigned
 				TexAttSelNameOff = readOffset f
-				TexAttSelNum = readlong f #unsigned
+				TexAttSelNum = ReadLong f #unsigned
 				RtnTexAS = ftell f
 				fseek f TexAttSelNameOff#seek_set
 				TexAttSelName = readstring f
 				fseek f RtnTexSel#seek_set
 
-				if tglDebug.state do(
-					Finishing=case TexAttSelUnk2 of(
+				if tglDebug.state do (
+					Finishing=case TexAttSelUnk2 of (
 						3328: "Glossy"
 						3580: "Matte"
 						default: TexAttSelUnk2
@@ -261,7 +352,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 			RtnTexAS = RtnTexAS2
 			-- Need to do a two-pass to fix script erroring when it tries to add an emissive / albedo #1 before albedo #0 is applied.
 			fseek f tSelOff#seek_set
-			for t = 1 to tCount do(
+			for t = 1 to tCount do (
 			TexSelNameOffset = ReadOffset f
 			FTEXPos = ReadOffset f
 			RtnTexSel = ftell f
@@ -270,12 +361,12 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 			TexSelName = readstring f
 
 			fseek f RtnTexAS#seek_set
-			TexAttSelUnk1 = readlong f #unsigned
-			TexAttSelUnk2 = readlong f #unsigned
-			TexAttSelUnk3 = readlong f #unsigned
-			TexAttSelUnk4 = readlong f #unsigned
+			TexAttSelUnk1 = ReadLong f #unsigned
+			TexAttSelUnk2 = ReadLong f #unsigned
+			TexAttSelUnk3 = ReadLong f #unsigned
+			TexAttSelUnk4 = ReadLong f #unsigned
 			TexAttSelNameOff = readOffset f
-			TexAttSelNum = readlong f #unsigned
+			TexAttSelNum = ReadLong f #unsigned
 			RtnTexAS = ftell f
 			fseek f TexAttSelNameOff#seek_set
 			TexAttSelName = readstring f
@@ -379,7 +470,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 		-- Disabling this as it was causing path/extension changes to not get acknowledged on subsequent loads.
 		-- for sm in sceneMaterials where sm.name == matName do PolyMat = sm
 
-		if PolyMat == undefined do(
+		if PolyMat == undefined do (
 			PolyMat = standardMaterial name:(matName as string) showInViewport:true twoSided:false
 			fseek f tSelOff#seek_set
 			printDebug(PolyMat.name + " uses the following textures:")
@@ -393,7 +484,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 			RtnTexAS = RtnTexAS + 24
 			RtnTexAS2 = RtnTexAS
-			for t = 1 to tCount do(
+			for t = 1 to tCount do (
 				TexSelNameOffset = ReadLong f
 				fseek f 4#seek_cur
 				RtnTexSel = ftell f
@@ -403,10 +494,10 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 				TexSelName = readstring f
 
 				fseek f RtnTexAS#seek_set
-				TexAttSelUnk1 = readshort f #unsigned
-				TexAttSelUnk2 = readshort f #unsigned
-				TexAttSelUnk3 = readshort f #unsigned
-				TexAttSelUnk4 = readshort f #unsigned
+				TexAttSelUnk1 = ReadShort f #unsigned
+				TexAttSelUnk2 = ReadShort f #unsigned
+				TexAttSelUnk3 = ReadShort f #unsigned
+				TexAttSelUnk4 = ReadShort f #unsigned
 				TexAttSelNameOff = ReadLong f
 				fseek f 4#seek_cur
 				TexAttSelNum = t
@@ -416,8 +507,8 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 				TexAttSelName = readstring f
 				fseek f RtnTexSel#seek_set
 
-				if tglDebug.state do(
-					Finishing=case TexAttSelUnk2 of(
+				if tglDebug.state do (
+					Finishing=case TexAttSelUnk2 of (
 						3328: "Glossy"
 						3580: "Matte"
 						default: TexAttSelUnk2
@@ -449,7 +540,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 			RtnTexAS = RtnTexAS2
 			-- Need to do a two-pass to fix script erroring when it tries to add an emissive / albedo #1 before albedo #0 is applied.
 			fseek f tSelOff#seek_set
-			for t = 1 to tCount do(
+			for t = 1 to tCount do (
 				TexSelNameOffset = ReadLong f
 				fseek f 4#seek_cur
 				RtnTexSel = ftell f
@@ -459,10 +550,10 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 				TexSelName = readstring f
 
 				fseek f RtnTexAS#seek_set
-				TexAttSelUnk1 = readshort f #unsigned
-				TexAttSelUnk2 = readshort f #unsigned
-				TexAttSelUnk3 = readshort f #unsigned
-				TexAttSelUnk4 = readshort f #unsigned
+				TexAttSelUnk1 = ReadShort f #unsigned
+				TexAttSelUnk2 = ReadShort f #unsigned
+				TexAttSelUnk3 = ReadShort f #unsigned
+				TexAttSelUnk4 = ReadShort f #unsigned
 				TexAttSelNameOff = ReadLong f
 				fseek f 4#seek_cur
 				TexAttSelNum = t
@@ -562,11 +653,11 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 		PolyMat
 	)
 
-	on btnLoad pressed do(
+	on btnLoad pressed do (
 		clearListener()
 		fname = GetOpenFileName caption:"Open BFRES" types:"BFRES File(*.bfres, *.fmdb)|*.bfres; *.fmdb"
 
-		if fname != undefined do(
+		if fname != undefined do (
 			fclose f
 			FMDLName_array = #()
 			FMDLOffset_array = #()
@@ -576,10 +667,10 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 			f = fopen fname "rb"	--open file in read only format
 
 			fseek f 0x04 #seek_set
-			SwitchCheck = readlong f #unsigned
+			SwitchCheck = ReadLong f #unsigned
 			fseek f 0x00 #seek_set
 
-			if SwitchCheck != 0x20202020 then(
+			if SwitchCheck != 0x20202020 then (
 			struct fmdlh(
 				fmdl,				-- Magic
 				fmdlName,		-- Filename Offset
@@ -609,7 +700,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 			fseek f 0x10#seek_cur
 
 			try(
-				For mdl = 1 to FMDLTotal Do(
+				for mdl = 1 to FMDLTotal do (
 					fseek f 12#seek_cur
 					FMDLOffset = ReadOffset f
 					append FMDLOffset_array FMDLOffset
@@ -639,7 +730,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 					fseek f NextFMDL#seek_set
 				)
 			
-				if FMDLName_array!=0 then(
+				if FMDLName_array!=0 then (
 					lstFMDL.items = FMDLName_array
 					lstFMDL.selection = 1
 					btnImport.enabled = true
@@ -683,17 +774,17 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 			fseek f 0x28 #seek_set
 			FMDLOffset = ReadLong f
 			fseek f 0xBC #seek_set
-			if verNumA == 0 and verNumB >= 9 do(fseek f 0x20 #seek_cur)
+			if verNumA == 0 and verNumB >= 9 do (fseek f 0x20 #seek_cur)
 			FMDLTotal = ReadShort f #unsigned
 			fseek f FMDLOffset #seek_set
 
 			try(
-				For mdl = 1 to FMDLTotal Do(
+				for mdl = 1 to FMDLTotal do (
 					FMDLOffset = (ftell f)
 					append FMDLOffset_array FMDLOffset
 
 					-- F_Model Header --
-					case of(
+					case of (
 					default:(throw ("Unexpected FMDL header!"))
 						(verNumA == 0 and verNumB < 9):(
 							-- < 0.9.0.0
@@ -775,13 +866,13 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 					NextFMDL = ftell f
 					fseek f fmdl_info.fmdlName#seek_set
-					fmdlNameStrLen = readshort f #unsigned
+					fmdlNameStrLen = ReadShort f #unsigned
 					fmdl_info.fmdlName = ReadFixedString f fmdlNameStrLen
 					append FMDLName_array fmdl_info.fmdlName
 					fseek f NextFMDL#seek_set
 				)
 			
-				if FMDLName_array!=0 then(
+				if FMDLName_array!=0 then (
 					lstFMDL.items = FMDLName_array
 					lstFMDL.selection = 1
 					btnImport.enabled = true
@@ -798,8 +889,8 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 		)
 	)
 
-	on btnImport pressed do(
-		if lstFMDL.selection != 0 do(
+	on btnImport pressed do (
+		if lstFMDL.selection != 0 do (
 			clearListener()
 			disableSceneRedraw()
 			st = timestamp() --get start time in milliseconds
@@ -815,10 +906,10 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 			local MatInfo = tglMatInfo.state
 
 			fseek f 0x04 #seek_set
-			SwitchCheck = readlong f #unsigned
+			SwitchCheck = ReadLong f #unsigned
 			fseek f 0x00 #seek_set
 
-		if SwitchCheck != 0x20202020 then(
+		if SwitchCheck != 0x20202020 then (
 			-- Wii U
 			struct fmdlh(
 				fmdl,						-- Magic
@@ -969,7 +1060,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 			verNumD = ReadByte f
 			FMDLList_array = lstFMDL.selection as array
 
-			for x = 1 to FMDLList_array.count do(
+			for x = 1 to FMDLList_array.count do (
 				fseek f FMDLOffset_array[FMDLList_array[x]]#seek_set
 
 				FMDLArr = #()
@@ -1009,12 +1100,12 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 				-- F_Vertex Header --
 				fseek f fmdl_info.fvtxArrOff#seek_set
-				For vtx = 1 to fmdl_info.fvtxCount Do(
+				for vtx = 1 to fmdl_info.fvtxCount do (
 					fvtx_info=(fvtxh \
 						fvtx: (ReadFixedString f 4) \
 						attCount: (ReadByte f) \
 						buffCount: (ReadByte f) \
-						sectIndx: (ReadBEshort f) \
+						sectIndx: (ReadBEShort f) \
 						vertCount: (ReadBELong f) \
 						u1: (ReadBEShort f) \
 						u2: (ReadBEShort f) \
@@ -1031,7 +1122,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 				fseek f fmdl_info.fmatIndx#seek_set
 				fseek f 24#seek_cur
 
-				For mat = 1 to fmdl_info.fmatCount Do(
+				for mat = 1 to fmdl_info.fmatCount do (
 					fseek f 8#seek_cur
 					FMATNameOffset = ReadOffset f
 					Rtn = ftell f
@@ -1050,7 +1141,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						matName: (ReadOffset f) \
 						u1: (ReadBELong f) \
 						sectIndx: (ReadBEShort f) \
-						rendParamCount: (ReadBEshort f) \
+						rendParamCount: (ReadBEShort f) \
 						texSelCount: (ReadByte f) \
 						texAttSelCount: (ReadByte f) \
 						matParamCount: (ReadBEShort f) \
@@ -1073,21 +1164,21 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 					append FMATArr(fmat_info)
 					printDebug fmat_info
 
-					if MatInfo == true do(
+					if MatInfo == true do (
 						fseek f FMATArr[mat].matParamArrOff #seek_set
 						print "--------------------"
 						print ("Texture properties for " + FMATName + ":")
 						print "--------------------"
-						for m = 1 to FMATArr[mat].matParamCount do(
-							matParamFlag = readbyte f
-							matParamSize = readbyte f
-							matParamStart = readBEshort f
-							matParamUnk = readBElong f
-							if verNumB >= 3 do(
-								blank = readBElong f
-								matParamIndex1 = readBEshort f
-								matParamIndex2 = readBEshort f
-								if verNumB == 3 do(matFMATOff = ReadOffset f)
+						for m = 1 to FMATArr[mat].matParamCount do (
+							matParamFlag = ReadByte f
+							matParamSize = ReadByte f
+							matParamStart = ReadBEShort f
+							matParamUnk = ReadBELong f
+							if verNumB >= 3 do (
+								blank = ReadBELong f
+								matParamIndex1 = ReadBEShort f
+								matParamIndex2 = ReadBEShort f
+								if verNumB == 3 do (matFMATOff = ReadOffset f)
 							)
 							matStringOff = ReadOffset f
 
@@ -1100,14 +1191,14 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 							-- Thanks, Tockdom!
 							case matParamFlag of (
 								default: (throw("Unknown param type!"))
-								0x00: (matParamVar1 = readBElong f
+								0x00: (matParamVar1 = ReadBELong f
 										case matParamVar1 of (
 											0: (matParamVar1 = "False")
 											1: (matParamVar1 = "True")
 										)
 									print (matParamString as string + ": " + matParamVar1 as string)
 									) -- 1 boolean
-								0x01: (matParamVar1 = readBElong f; matParamVar2 = readBElong f
+								0x01: (matParamVar1 = ReadBELong f; matParamVar2 = ReadBELong f
 										case matParamVar1 of (
 											0: (matParamVar1 = "False")
 											1: (matParamVar1 = "True")
@@ -1118,7 +1209,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 										)
 									print (matParamString as string + ": " + matParamVar1 as string + ", " + matParamVar2 as string)
 									) -- 2 booleans
-								0x02: (matParamVar1 = readBElong f; matParamVar2 = readBElong f; matParamVar3 = readBElong f
+								0x02: (matParamVar1 = ReadBELong f; matParamVar2 = ReadBELong f; matParamVar3 = ReadBELong f
 										case matParamVar1 of (
 											0: (matParamVar1 = "False")
 											1: (matParamVar1 = "True")
@@ -1133,7 +1224,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 										)
 									print (matParamString as string + ": " + matParamVar1 as string + ", " + matParamVar2 as string + ", " + matParamVar3 as string)
 									) -- 3 booleans
-								0x03: (matParamVar1 = readBElong f; matParamVar2 = readBElong f; matParamVar3 = readBElong f; matParamVar4 = readBElong f
+								0x03: (matParamVar1 = ReadBELong f; matParamVar2 = ReadBELong f; matParamVar3 = ReadBELong f; matParamVar4 = ReadBELong f
 										case matParamVar1 of (
 											0: (matParamVar1 = "False")
 											1: (matParamVar1 = "True")
@@ -1152,28 +1243,28 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 										)
 									print (matParamString as string + ": " + matParamVar1 as string + ", " + matParamVar2 as string + ", " + matParamVar3 as string + ", " + matParamVar4 as string)
 									) -- 4 booleans
-								0x04: (matParamVar1 = readBElong f
+								0x04: (matParamVar1 = ReadBELong f
 									print (matParamString as string + ": " + matParamVar1 as string)
 									) -- 1 signed integer
-								0x05: (matParamVar1 = readBElong f; matParamVar2 = readBElong f
+								0x05: (matParamVar1 = ReadBELong f; matParamVar2 = ReadBELong f
 									print (matParamString as string + ": " + matParamVar1 as string + ", " + matParamVar2 as string)
 									) -- 2 signed integers
-								0x06: (matParamVar1 = readBElong f; matParamVar2 = readBElong f; matParamVar3 = readBElong f
+								0x06: (matParamVar1 = ReadBELong f; matParamVar2 = ReadBELong f; matParamVar3 = ReadBELong f
 									print (matParamString as string + ": " + matParamVar1 as string + ", " + matParamVar2 as string + ", " + matParamVar3 as string)
 									) -- 3 signed integers
-								0x07: (matParamVar1 = readBElong f; matParamVar2 = readBElong f; matParamVar3 = readBElong f; matParamVar4 = readBElong f
+								0x07: (matParamVar1 = ReadBELong f; matParamVar2 = ReadBELong f; matParamVar3 = ReadBELong f; matParamVar4 = ReadBELong f
 									print (matParamString as string + ": " + matParamVar1 as string + ", " + matParamVar2 as string + ", " + matParamVar3 as string + ", " + matParamVar4 as string)
 									) -- 4 signed integers
-								0x08: (matParamVar1 = readBElong f
+								0x08: (matParamVar1 = ReadBELong f
 									print (matParamString as string + ": " + matParamVar1 as string)
 									) -- 1 unsigned integer
-								0x09: (matParamVar1 = readBElong f; matParamVar2 = readBElong f
+								0x09: (matParamVar1 = ReadBELong f; matParamVar2 = ReadBELong f
 									print (matParamString as string + ": " + matParamVar1 as string + ", " + matParamVar2 as string)
 									) -- 2 unsigned integers
-								0x0A: (matParamVar1 = readBElong f; matParamVar2 = readBElong f; matParamVar3 = readBElong f
+								0x0A: (matParamVar1 = ReadBELong f; matParamVar2 = ReadBELong f; matParamVar3 = ReadBELong f
 									print (matParamString as string + ": " + matParamVar1 as string + ", " + matParamVar2 as string + ", " + matParamVar3 as string)
 									) -- 3 unsigned integers
-								0x0B: (matParamVar1 = readBElong f; matParamVar2 = readBElong f; matParamVar3 = readBElong f; matParamVar4 = readBElong f
+								0x0B: (matParamVar1 = ReadBELong f; matParamVar2 = ReadBELong f; matParamVar3 = ReadBELong f; matParamVar4 = ReadBELong f
 									print (matParamString as string + ": " + matParamVar1 as string + ", " + matParamVar2 as string + ", " + matParamVar3 as string + ", " + matParamVar4 as string)
 									) -- 4 unsigned integers
 								0x0C: (matParamVar1 = readBEfloat f
@@ -1248,16 +1339,16 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 								0x1D: (matParamSRTXScl = readBEfloat f; matParamSRTYScl = readBEfloat f; matParamSRTZScl = readBEfloat f; matParamSRTXRot = readBEfloat f; matParamSRTYRot = readBEfloat f; matParamSRTZRot = readBEfloat f; matParamSRTXTrs = readBEfloat f; matParamSRTYTrs = readBEfloat f; matParamSRTZTrs = readBEfloat f
 									print (matParamString as string + ": 3D Scale X = " + matParamSRTXScl as string + ", Y = " + matParamSRTYScl as string + ", Z = " + matParamSRTZScl as string + " | Rotate X = " + matParamSRTXRot as string + ", Y = " + matParamSRTYRot as string + ", Z = " + matParamSRTZRot as string + " | Translation X = " + matParamSRTXTrs as string + ", Y = " + matParamSRTYTrs as string + ", Z = " + matParamSRTZTrs as string)
 									) -- 3D SRT
-								0x1E: (matParamAxis = readBElong f; matParamSRTXScl = readBEfloat f; matParamSRTYScl = readBEfloat f; matParamSRTRot = readBEfloat f; matParamSRTXTrs = readBEfloat f; matParamSRTYTrs = readBEfloat f
-									case matParamAxis of(
+								0x1E: (matParamAxis = ReadBELong f; matParamSRTXScl = readBEfloat f; matParamSRTYScl = readBEfloat f; matParamSRTRot = readBEfloat f; matParamSRTXTrs = readBEfloat f; matParamSRTYTrs = readBEfloat f
+									case matParamAxis of (
 										0: (matParamAxis = "Maya")
 										1: (matParamAxis = "3DS Max")
 										2: (matParamAxis = "Softimage")
 									)
 									print (matParamString as string + ": Scale X = " + matParamSRTXScl as string + ", Y = " + matParamSRTYScl as string + " | Rotate = " + matParamSRTRot as string + " | Translation X = " + matParamSRTXTrs as string + ", Y = " + matParamSRTYTrs as string + " | Axis: " + matParamAxis as string)
 									) -- Texture SRT
-								0x1F: (matParamAxis = readBElong f; matParamSRTXScl = readBEfloat f; matParamSRTYScl = readBEfloat f; matParamSRTRot = readBEfloat f; matParamSRTXTrs = readBEfloat f; matParamSRTYTrs = readBEfloat f; matParamSRTMatPtr = readBElong f
-									case matParamAxis of(
+								0x1F: (matParamAxis = ReadBELong f; matParamSRTXScl = readBEfloat f; matParamSRTYScl = readBEfloat f; matParamSRTRot = readBEfloat f; matParamSRTXTrs = readBEfloat f; matParamSRTYTrs = readBEfloat f; matParamSRTMatPtr = ReadBELong f
+									case matParamAxis of (
 										0: (matParamAxis = "Maya")
 										1: (matParamAxis = "3DS Max")
 										2: (matParamAxis = "Softimage")
@@ -1294,15 +1385,15 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 				-- Node Setup --
 				fseek f fskl_info.invIndxArrOff #seek_set
-				for nodes = 1 to (fskl_info.invIndxArrCount + fskl_info.exIndxCount) do(
-					NodeID = readBEshort f + 1
+				for nodes = 1 to (fskl_info.invIndxArrCount + fskl_info.exIndxCount) do (
+					NodeID = ReadBEShort f + 1
 					append Node_Array NodeID
 				)
 
 				-- F_Shape Header --
 				fseek f fmdl_info.fshpIndx#seek_set
 				fseek f 24#seek_cur
-				For shp = 1 to fmdl_info.fshpCount Do(
+				for shp = 1 to fmdl_info.fshpCount do (
 					fseek f 12#seek_cur
 					FSHPOffset = ReadOffset f
 					Rtn = ftell f
@@ -1328,7 +1419,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						visGrpNodeOff: (ReadOffset f) \
 						visGrpRangeOff: (ReadOffset f) \
 						visGrpIndxOff: (ReadOffset f) \
-						u5: (ReadBElong f) \
+						u5: (ReadBELong f) \
 					)
 
 					fseek f fshp_info.polyName #seek_set
@@ -1342,7 +1433,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 				--fseek f fskl_info.invMatrArrOff#seek_set
 				NxtMatr = 0
 				fseek f fskl_info.invIndxArrOff#seek_set
-				For indx = 1 to fskl_info.invIndxArrCount Do(
+				for indx = 1 to fskl_info.invIndxArrCount do (
 					invIndx = ReadBEShort f +1
 					NxtIndx = ftell f
 
@@ -1359,7 +1450,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 				-- F_Model Bone Creation --
 				fseek f fskl_info.boneArrOff#seek_set
-				For bn = 1 to fskl_info.boneArrCount Do(
+				for bn = 1 to fskl_info.boneArrCount do (
 					boneData=( bdata \
 						bName: (ReadOffset f) \
 						bIndx: (ReadBEShort f +1) \
@@ -1388,12 +1479,12 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 					boneData.bName = readstring f
 					fseek f Rtn #seek_set
 
-					if boneData.bFlags == 0x0001 then(
-						if (bit.and boneData.bFlags2 0x0080) == 0x0000 then(tfm = inverse (scaleMatrix [boneData.scaleX,boneData.scaleY,boneData.scaleZ])) else (tfm = inverse (scaleMatrix [1,1,1]))
+					if boneData.bFlags == 0x0001 then (
+						if (bit.and boneData.bFlags2 0x0080) == 0x0000 then (tfm = inverse (scaleMatrix [boneData.scaleX,boneData.scaleY,boneData.scaleZ])) else (tfm = inverse (scaleMatrix [1,1,1]))
 						tfm = tfm * (quat boneData.rotX boneData.rotY boneData.rotZ boneData.rotW) as matrix3
 						tfm = inverse(tfm)
 					)else(
-						if (bit.and boneData.bFlags2 0x0080) == 0x0000 then(tfm = scaleMatrix [boneData.scaleX,boneData.scaleY,boneData.scaleZ]) else (tfm = scaleMatrix [1,1,1])
+						if (bit.and boneData.bFlags2 0x0080) == 0x0000 then (tfm = scaleMatrix [boneData.scaleX,boneData.scaleY,boneData.scaleZ]) else (tfm = scaleMatrix [1,1,1])
 						tfm = tfm * (eulerangles (boneData.rotX*(180/pi)) (boneData.rotY*(180/pi)) (boneData.rotZ*(180/pi))) as matrix3
 					)
 					tfm.row4 = [boneData.posX,boneData.posY,boneData.posZ]
@@ -1404,7 +1495,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						(normalize tfm.row3)
 
 					boneName = boneData.bName
-					if FMDLList_array.count > 1 do(boneName += "_" + x as string)
+					if FMDLList_array.count > 1 do (boneName += "_" + x as string)
 					fseek f Rtn#seek_set
 					newBone.name = boneName
 					newBone.width = 0.03
@@ -1416,7 +1507,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 					newBone.pos.controller = TCB_position()
 					newBone.rotation.controller = TCB_rotation()
 
-					If boneData.parIndx1 != 65536 Do(
+					if boneData.parIndx1 != 65536 do (
 						newBone.parent = BoneArray[boneData.parIndx1]
 						newBone.transform *= BoneArray[boneData.parIndx1].transform
 					)
@@ -1424,13 +1515,13 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 					append BoneArray newBone
 					append BoneFixArray newBone.transform
 					printDebug (boneData)
-					case of(
+					case of (
 						(verNumB <= 3):(fseek f 48#seek_cur)
 					)
 				)
 
 				-- Mesh Building --
-				For m = 1 to FSHPArr.count Do(
+				for m = 1 to FSHPArr.count do (
 					Vert_Array = #()
 					Normal_Array = #()
 					UV_Array = #()
@@ -1451,7 +1542,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 					MeshName = FSHPArr[m].polyName
 					fseek f FVTXArr[FSHPArr[m].fvtxIndx].attArrOff#seek_set
 					printDebug("Building polygon " + MeshName + "...")
-					For att = 1 to FVTXArr[FSHPArr[m].fvtxIndx].attCount Do(
+					for att = 1 to FVTXArr[FSHPArr[m].fvtxIndx].attCount do (
 						AttTypeOff = ReadOffset f
 						Rtn1 = ftell f
 						fseek f AttTypeOff#seek_set
@@ -1460,13 +1551,13 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						buffIndx = ReadByte f+1
 						skip = ReadByte f
 						buffOff = ReadBEShort f
-						vertType = ReadBElong f
+						vertType = ReadBELong f
 						append AttrArr (attdata attName: AttType buffIndx: buffIndx buffOff: buffOff vertType: vertType)
 					)
 					printDebug AttrArr
 
 					fseek f FVTXArr[FSHPArr[m].fvtxIndx].buffArrOff#seek_set
-					For buf = 1 to FVTXArr[FSHPArr[m].fvtxIndx].buffCount Do(
+					for buf = 1 to FVTXArr[FSHPArr[m].fvtxIndx].buffCount do (
 						unk1 = ReadLong f
 						BufferSize = ReadBELong f
 						unk2 = ReadLong f
@@ -1479,11 +1570,11 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 					printDebug BuffArr
 
 					fseek f BuffArr[1].dataOffset #seek_set
-					For attr = 1 to AttrArr.count Do(
+					for attr = 1 to AttrArr.count do (
 						locPoint = ((BuffArr[AttrArr[attr].buffIndx].dataOffset) + (AttrArr[attr].buffOff))
 						fseek f locPoint #seek_set
-						if attr == 1 do(printDebug("Vertex buffer starts at 0x" + bit.intAsHex(ftell f) as string))
-						For v = 1 to FVTXArr[FSHPArr[m].fvtxIndx].vertCount Do(
+						if attr == 1 do (printDebug("Vertex buffer starts at 0x" + bit.intAsHex(ftell f) as string))
+						for v = 1 to FVTXArr[FSHPArr[m].fvtxIndx].vertCount do (
 							VertStart = (ftell f + (BuffArr[AttrArr[attr].buffIndx].strideSize))
 							case AttrArr[attr].vertType of (
 								-- 0x00 - Unsigned ints
@@ -1585,7 +1676,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 								)
 								0x020B:(
 									-- 3 10-bit values, signed
-									vars = ReadBElong f
+									vars = ReadBELong f
 									var1 = sign10(bit.and (vars) 0x3FF) as float / 511
 									var2 = sign10(bit.and (bit.shift vars -10) 0x3FF) as float / 511
 									var3 = sign10(bit.and (bit.shift vars -20) 0x3FF) as float / 511
@@ -1664,7 +1755,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 											var4 = vRange 0 1 (var4 as float)
 										)
 									)
-									if VertColors == 1 do(
+									if VertColors == 1 do (
 										append Color_Array[var1,var2,var3]
 										append Alpha_Array var4
 									)
@@ -1718,7 +1809,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 											)
 										)
 									)
-									case of(
+									case of (
 										(AttrArr[attr].attName == "_u0" or AttrArr[attr].attName == "color"): append UV_Array[var1,var2,0]
 										(AttrArr[attr].attName == "_u1"): append UV2_Array[var1,var2,0]
 										(AttrArr[attr].attName == "_u2"): append UV3_Array[var1,var2,0]
@@ -1764,7 +1855,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 											weight2 = var2 as float / 255
 											weight3 = var3 as float / 255
 											weight4 = var4 as float / 255
-											if weight4 >= 1 do(weight4 = 0)
+											if weight4 >= 1 do (weight4 = 0)
 										)
 										0x0811:(
 											weight1 = var1
@@ -1784,29 +1875,29 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						) -- Close Vert Read Loop
 					) -- Close Attributes Loop
 
-					if VertColors == 1 do(
-						If Color_Array.count == 0 Do(
-							For ca = 1 to Vert_array.count Do (
+					if VertColors == 1 do (
+						if Color_Array.count == 0 do (
+							for ca = 1 to Vert_array.count do (
 								append Color_Array[255,255,255]
 								append Alpha_Array 1
 							)
 						)
 					)
 
-					If W1_Array.count == 0 Do(
-						For v = 1 to B1_array.count Do(
+					if W1_Array.count == 0 do (
+						for v = 1 to B1_array.count do (
 							append W1_Array (Weight_Info_Struct weight1:1 weight2:0 weight3:0 weight4:0)
 						)
 					)
 				
-					If B2_Array.count == 0 Do(
-						For v = 1 to B1_array.count Do(
+					if B2_Array.count == 0 do (
+						for v = 1 to B1_array.count do (
 							append B2_Array (Bone_Info_Struct bone1:1 bone2:1 bone3:1 bone4:1)
 							append W2_Array (Weight_Info_Struct weight1:0 weight2:0 weight3:0 weight4:0)
 						)
 					)
 
-					for b = 1 to W1_Array.count Do(
+					for b = 1 to W1_Array.count do (
 						w = (weight_data boneids:#() weights:#())
 						maxweight = 0
 						
@@ -1819,43 +1910,43 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						if W2_array[b].Weight3 != 0 do maxweight += W2_array[b].Weight3
 						if W2_array[b].Weight4 != 0 do maxweight += W2_array[b].Weight4
 
-						if maxweight != 0 then(
-							if W1_array[b].Weight1 != 0 then(
+						if maxweight != 0 then (
+							if W1_array[b].Weight1 != 0 then (
 								w1 = W1_array[b].Weight1 as float
 								append w.boneids (B1_array[b].Bone1)
 								append w.weights (w1)
 							)
-							if W1_array[b].Weight2 != 0 then(
+							if W1_array[b].Weight2 != 0 then (
 								w2 = W1_array[b].Weight2 as float
 								append w.boneids (B1_array[b].Bone2)
 								append w.weights (w2)
 							)
-							if W1_array[b].Weight3 != 0 then(
+							if W1_array[b].Weight3 != 0 then (
 								w3 = W1_array[b].Weight3 as float
 								append w.boneids (B1_array[b].Bone3)
 								append w.weights (w3)
 							)
-							if W1_array[b].Weight4 != 0 then(
+							if W1_array[b].Weight4 != 0 then (
 								w4 = W1_array[b].Weight4 as float
 								append w.boneids (B1_array[b].Bone4)
 								append w.weights (w4)
 							)
-							if W2_array[b].Weight1 != 0 then(
+							if W2_array[b].Weight1 != 0 then (
 								w5 = W2_array[b].Weight1 as float
 								append w.boneids (B2_array[b].Bone1)
 								append w.weights (w5)
 							)
-							if W2_array[b].Weight2 != 0 then(
+							if W2_array[b].Weight2 != 0 then (
 								w6 = W2_array[b].Weight2 as float
 								append w.boneids (B2_array[b].Bone2)
 								append w.weights (w6)
 							)
-							if W2_array[b].Weight3 != 0 then(
+							if W2_array[b].Weight3 != 0 then (
 								w7 = W2_array[b].Weight3 as float
 								append w.boneids (B2_array[b].Bone3)
 								append w.weights (w7)
 							)
-							if W2_array[b].Weight4 != 0 then(
+							if W2_array[b].Weight4 != 0 then (
 								w8 = W2_array[b].Weight4 as float
 								append w.boneids (B2_array[b].Bone4)
 								append w.weights (w8)
@@ -1866,7 +1957,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 					fseek f FSHPArr[m].lodMdlOff#seek_set
 					if LODs == 2 do FSHPArr[m].lodMdlCount = 1
-					for l = 1 to FSHPArr[m].lodMdlCount do(
+					for l = 1 to FSHPArr[m].lodMdlCount do (
 						Face_Array = #()
 						lodmdl_info=(lodmdl \
 							u1: (ReadBELong f) \
@@ -1882,7 +1973,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 						fseek f lodmdl_info.indxBuffOff#seek_set
 						unk1 = ReadBELong f
-						FaceCount = (ReadBElong f)
+						FaceCount = (ReadBELong f)
 						fseek f 12#seek_cur
 						FaceBuffer = ReadOffset f
 						
@@ -1891,7 +1982,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						case of (
 							(lodmdl_info.faceType == 4):(
 								FaceCount = (FaceCount/6)
-								For face = 1 to FaceCount Do(
+								for face = 1 to FaceCount do (
 									fa = ((ReadBEShort f) + 1 + PolyStart)
 									fb = ((ReadBEShort f) + 1 + PolyStart)
 									fc = ((ReadBEShort f) + 1 + PolyStart)
@@ -1900,7 +1991,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 							)
 							(lodmdl_info.faceType == 9):(
 								FaceCount = (FaceCount/12)
-								For face = 1 to FaceCount Do(
+								for face = 1 to FaceCount do (
 									fa = ((ReadBELong f) + 1 + PolyStart)
 									fb = ((ReadBELong f) + 1 + PolyStart)
 									fc = ((ReadBELong f) + 1 + PolyStart)
@@ -1909,7 +2000,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 							)
 						)
 						
-						if VertColors == 1 do(local Cac=Color_Array.count)
+						if VertColors == 1 do (local Cac=Color_Array.count)
 						local Vac=Vert_Array.count
 						local Fac=Face_array.count
 						local Nac=Normal_array.count
@@ -1921,14 +2012,14 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						setNumCPVVerts msh msh.numTVerts
 						defaultVCFaces msh
 						buildTVFaces msh
-						if VertColors == 1 do(
+						if VertColors == 1 do (
 							setCVertMode msh true
 							setShadeCVerts msh true
 							for j = 1 to Cac do setvertcolor msh j Color_array[j]
-							for j = 1 to Cac do(meshop.setVertAlpha msh -2 j Alpha_array[j])
+							for j = 1 to Cac do (meshop.setVertAlpha msh -2 j Alpha_array[j])
 						)
 
-						If Vac == UV_Array.count Do(
+						if Vac == UV_Array.count do (
 							for j = 1 to Vac do setTVert msh j UV_array[j]
 							for j = 1 to Fac do setTVFace msh j Face_array[j]
 						)
@@ -1953,17 +2044,17 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						EN_convertVS = msh.Edit_Normals.ConvertVertexSelection
 						EN_setNormal = msh.Edit_Normals.SetNormal
 						normID = #{}
-						for v = 1 to Nac do(
+						for v = 1 to Nac do (
 							free normID
 							EN_convertVS #{v} &normID
 							for id in normID do EN_setNormal id Normal_array[v]
 						)
 
-						if Bac > 0 do(
-							if FSHPArr[m].matrFlag == 0 then(
+						if Bac > 0 do (
+							if FSHPArr[m].matrFlag == 0 then (
 								$.transform = BoneFixArray[FSHPArr[m].fsklIndx]
-								if RigModel != 3 do(
-									if RigModel == 1 then(
+								if RigModel != 3 do (
+									if RigModel == 1 then (
 										$.pivot = [0,0,0]
 										ResetXForm $
 										CollapseStack $	
@@ -1974,23 +2065,23 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 									skinOps.addBone skinMod maxbone 0
 								)
 							)else(
-								if RigModel != 3 do(
-									if FSHPArr[m].matrFlag == 1 do(for b in BoneArray do b.transform = matrix3 1)
+								if RigModel != 3 do (
+									if FSHPArr[m].matrFlag == 1 do (for b in BoneArray do b.transform = matrix3 1)
 									skinMod = skin()
 									boneIDMap = #()
 									addModifier msh skinMod
 									msh.Skin.weightAllVertices = false
 
-									for i = 1 to Bac do(
+									for i = 1 to Bac do (
 										maxbone = getnodebyname BoneArray[i].name
 										skinOps.addBone skinMod maxbone (if i != Bac then 0 else 1)
 									)
 
 									local numSkinBones = skinOps.GetNumberBones skinMod
-									for i = 1 to numSkinBones do(
+									for i = 1 to numSkinBones do (
 										local boneName = skinOps.GetBoneName skinMod i 0
-										for j = 1 to Bac do(
-											if boneName == BoneArray[j].Name do(
+										for j = 1 to Bac do (
+											if boneName == BoneArray[j].Name do (
 												boneIDMap[j] = i
 												j = Bac + 1
 											)
@@ -1999,7 +2090,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 									modPanel.setCurrentObject skinMod
 
-									for i = 1 to Vac do(
+									for i = 1 to Vac do (
 										skinOps.SetVertexWeights skinMod i 1 1
 										skinOps.unnormalizeVertex skinMod i true 
 										skinOps.SetVertexWeights skinMod i 1 0
@@ -2007,13 +2098,13 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 									)
 									skinOps.RemoveZeroWeights skinMod
 
-									for i = 1 to Wac do(
+									for i = 1 to Wac do (
 										w = Weight_array[i]
 										bi = #() --bone index array
 										wv = #() --weight value array
 										wbic = w.boneids.count
 
-										for j = 1 to wbic do(
+										for j = 1 to wbic do (
 											boneid = w.boneids[j]
 											weight = w.weights[j]
 											append bi boneIDMap[boneid]
@@ -2022,9 +2113,9 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 										skinOps.ReplaceVertexWeights skinMod i bi wv
 									)
 
-									if FSHPArr[m].matrFlag == 1 do(
-										for b = 1 to Bac do(BoneArray[b].transform = BoneFixArray[b])
-										if RigModel == 1 then(
+									if FSHPArr[m].matrFlag == 1 do (
+										for b = 1 to Bac do (BoneArray[b].transform = BoneFixArray[b])
+										if RigModel == 1 then (
 											$.pivot = [0,0,0]
 											ResetXForm $
 											CollapseStack $	
@@ -2034,16 +2125,16 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 											addModifier msh skinMod
 											msh.Skin.weightAllVertices = false
 
-											for i = 1 to Bac do(
+											for i = 1 to Bac do (
 												maxbone = getnodebyname BoneArray[i].name
 												skinOps.addBone skinMod maxbone (if i != Bac then 0 else 1)
 											)
 
 											local numSkinBones = skinOps.GetNumberBones skinMod
-											for i = 1 to numSkinBones do(
+											for i = 1 to numSkinBones do (
 												local boneName = skinOps.GetBoneName skinMod i 0
-												for j = 1 to Bac do(
-													if boneName == BoneArray[j].Name do(h
+												for j = 1 to Bac do (
+													if boneName == BoneArray[j].Name do (h
 														boneIDMap[j] = i
 														j = Bac + 1
 													)
@@ -2052,7 +2143,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 											modPanel.setCurrentObject skinMod
 
-											for i = 1 to Vac do(
+											for i = 1 to Vac do (
 												skinOps.SetVertexWeights skinMod i 1 1
 												skinOps.unnormalizeVertex skinMod i true 
 												skinOps.SetVertexWeights skinMod i 1 0
@@ -2060,13 +2151,13 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 											)
 											skinOps.RemoveZeroWeights skinMod
 
-											for i = 1 to Wac do(
+											for i = 1 to Wac do (
 												w = Weight_array[i]
 												bi = #() --bone index array
 												wv = #() --weight value array
 												wbic = w.boneids.count
 
-												for j = 1 to wbic do(
+												for j = 1 to wbic do (
 													boneid = w.boneids[j]
 													weight = w.weights[j]
 													append bi boneIDMap[boneid]
@@ -2082,11 +2173,11 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						)
 
 						local UVarrays = #(UV2_array,UV3_array,UV4_array,UV5_array)
-						case UVLayers of(
+						case UVLayers of (
 							1:(
-								for uva=1 to UVarrays.count do(
+								for uva=1 to UVarrays.count do (
 									local uvac=UVarrays[uva].count
-									if uvac > 0 do(
+									if uvac > 0 do (
 										meshop.setNumMaps msh (uva+2) keep:true
 										for i = 1 to uvac do meshop.setMapVert msh (uva+1) i UVarrays[uva][i]
 									)
@@ -2094,21 +2185,21 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 							)
 
 							2:(
-								for uva=1 to UVarrays.count do(
+								for uva=1 to UVarrays.count do (
 									local uvac=UVarrays[uva].count
-									if uvac > 1 do(
+									if uvac > 1 do (
 										msh = mesh vertices:Vert_array faces:Face_array
 										msh.numTVerts = Vac
 										setNumCPVVerts msh msh.numTVerts
 										defaultVCFaces msh
 										buildTVFaces msh
-										if VertColors == 1 do(
+										if VertColors == 1 do (
 											setCVertMode msh true
 											setShadeCVerts msh true
 											for j = 1 to Cac do setvertcolor msh j Color_array[j]
-											for j = 1 to Cac do(meshop.setVertAlpha msh -2 j Alpha_array[j])
+											for j = 1 to Cac do (meshop.setVertAlpha msh -2 j Alpha_array[j])
 										)
-										If Vac == uvac Do(
+										if Vac == uvac do (
 											for j = 1 to Vac do setTVert msh j UVarrays[uva][j]
 											for j = 1 to Fac do setTVFace msh j Face_array[j]
 										)
@@ -2124,17 +2215,17 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 										EN_convertVS = msh.Edit_Normals.ConvertVertexSelection
 										EN_setNormal = msh.Edit_Normals.SetNormal
 										normID = #{}
-										for v = 1 to Nac do(
+										for v = 1 to Nac do (
 											free normID
 											EN_convertVS #{v} &normID
 											for id in normID do EN_setNormal id Normal_array[v]
 										)
 
-										if Bac > 0 do(
-											if FSHPArr[m].matrFlag == 0 then(
+										if Bac > 0 do (
+											if FSHPArr[m].matrFlag == 0 then (
 												$.transform = BoneFixArray[FSHPArr[m].fsklIndx]
-												if RigModel != 3 do(
-													if RigModel == 1 then(
+												if RigModel != 3 do (
+													if RigModel == 1 then (
 														$.pivot = [0,0,0]
 														ResetXForm $
 														CollapseStack $	
@@ -2145,24 +2236,24 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 													skinOps.addBone skinMod maxbone 0
 												)
 											)else(
-												if RigModel != 3 do(
+												if RigModel != 3 do (
 													skinMod = skin()
 													boneIDMap = #()
 													addModifier msh skinMod
 													msh.Skin.weightAllVertices = false
 
-													if FSHPArr[m].matrFlag == 1 do(for b in BoneArray do b.transform = matrix3 1)
+													if FSHPArr[m].matrFlag == 1 do (for b in BoneArray do b.transform = matrix3 1)
 
-													for i = 1 to Bac do(
+													for i = 1 to Bac do (
 														maxbone = getnodebyname BoneArray[i].name
 														skinOps.addBone skinMod maxbone (if i != Bac then 0 else 1)
 													)
 
 													local numSkinBones = skinOps.GetNumberBones skinMod
-													for i = 1 to numSkinBones do(
+													for i = 1 to numSkinBones do (
 														local boneName = skinOps.GetBoneName skinMod i 0
-														for j = 1 to Bac do(
-															if boneName == BoneArray[j].Name do(
+														for j = 1 to Bac do (
+															if boneName == BoneArray[j].Name do (
 																boneIDMap[j] = i
 																j = Bac + 1
 															)
@@ -2171,7 +2262,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 													modPanel.setCurrentObject skinMod
 
-													for i = 1 to Vac do(
+													for i = 1 to Vac do (
 														skinOps.SetVertexWeights skinMod i 1 1
 														skinOps.unnormalizeVertex skinMod i true 
 														skinOps.SetVertexWeights skinMod i 1 0
@@ -2179,13 +2270,13 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 													)
 													skinOps.RemoveZeroWeights skinMod
 
-													for i = 1 to Wac do(
+													for i = 1 to Wac do (
 														w = Weight_array[i]
 														bi = #() --bone index array
 														wv = #() --weight value array
 														wbic = w.boneids.count
 
-														for j = 1 to wbic do(
+														for j = 1 to wbic do (
 															boneid = w.boneids[j]
 															weight = w.weights[j]
 															append bi boneIDMap[boneid]
@@ -2194,9 +2285,9 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 														skinOps.ReplaceVertexWeights skinMod i bi wv
 													)
 
-													if FSHPArr[m].matrFlag == 1 do(
-														for b = 1 to Bac do(BoneArray[b].transform = BoneFixArray[b])
-														if RigModel == 1 then(
+													if FSHPArr[m].matrFlag == 1 do (
+														for b = 1 to Bac do (BoneArray[b].transform = BoneFixArray[b])
+														if RigModel == 1 then (
 															$.pivot = [0,0,0]
 															ResetXForm $
 															CollapseStack $	
@@ -2206,16 +2297,16 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 															addModifier msh skinMod
 															msh.Skin.weightAllVertices = false
 
-															for i = 1 to Bac do(
+															for i = 1 to Bac do (
 																maxbone = getnodebyname BoneArray[i].name
 																skinOps.addBone skinMod maxbone (if i != Bac then 0 else 1)
 															)
 
 															local numSkinBones = skinOps.GetNumberBones skinMod
-															for i = 1 to numSkinBones do(
+															for i = 1 to numSkinBones do (
 																local boneName = skinOps.GetBoneName skinMod i 0
-																for j = 1 to Bac do(
-																	if boneName == BoneArray[j].Name do(h
+																for j = 1 to Bac do (
+																	if boneName == BoneArray[j].Name do (h
 																		boneIDMap[j] = i
 																		j = Bac + 1
 																	)
@@ -2224,7 +2315,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 															modPanel.setCurrentObject skinMod
 
-															for i = 1 to Vac do(
+															for i = 1 to Vac do (
 																skinOps.SetVertexWeights skinMod i 1 1
 																skinOps.unnormalizeVertex skinMod i true 
 																skinOps.SetVertexWeights skinMod i 1 0
@@ -2232,13 +2323,13 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 															)
 															skinOps.RemoveZeroWeights skinMod
 
-															for i = 1 to Wac do(
+															for i = 1 to Wac do (
 																w = Weight_array[i]
 																bi = #() --bone index array
 																wv = #() --weight value array
 																wbic = w.boneids.count
 
-																for j = 1 to wbic do(
+																for j = 1 to wbic do (
 																	boneid = w.boneids[j]
 																	weight = w.weights[j]
 																	append bi boneIDMap[boneid]
@@ -2443,7 +2534,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 			verNumA = ReadByte f
 			FMDLList_array = lstFMDL.selection as array
 
-			for x = 1 to FMDLList_array.count do(
+			for x = 1 to FMDLList_array.count do (
 				fseek f FMDLOffset_array[FMDLList_array[x]]#seek_set
 
 				FMDLArr = #()
@@ -2461,7 +2552,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 				Node_Array = #()
 
 				-- F_Model Header --
-				case of(
+				case of (
 				default:(throw ("Unexpected FMDL header!"))
 					(verNumA == 0 and verNumB < 9):(
 						-- < 0.9.0.0
@@ -2542,15 +2633,15 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 				)
 
 				fseek f fmdl_info.fmdlName #seek_set
-				fmdlNameStrLen = readshort f #unsigned
+				fmdlNameStrLen = ReadShort f #unsigned
 				fmdl_info.fmdlName = ReadFixedString f fmdlNameStrLen
 				append FMDLArr(fmdl_info)
 				printDebug fmdl_info
 
 				-- F_Vertex Header --
 				fseek f fmdl_info.fvtxArrOff#seek_set
-				For vtx = 1 to fmdl_info.fvtxCount Do(
-					case of(
+				for vtx = 1 to fmdl_info.fvtxCount do (
+					case of (
 					default:(throw ("Unexpected FVTX header!"))
 						(verNumA == 0 and verNumB < 9):(
 							-- < 0.9.0.0
@@ -2619,8 +2710,8 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 				-- F_Material Header --
 				fseek f fmdl_info.fmatOff#seek_set
-				For mat = 1 to fmdl_info.fmatCount Do(
-					case of(
+				for mat = 1 to fmdl_info.fmatCount do (
+					case of (
 						default:(throw ("Unexpected FMAT header!"))
 						(verNumA == 0 and verNumB < 9):(
 							-- < 0.9.0.0
@@ -2796,47 +2887,47 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 					Rtn = ftell f
 					fseek f fmat_info.matName #seek_set
-					matNameStrLen = readshort f #unsigned
+					matNameStrLen = ReadShort f #unsigned
 					fmat_info.matName = ReadFixedString f matNameStrLen
 					append FMATArr(fmat_info)
 					printDebug fmat_info
-					if MatInfo == true do(
+					if MatInfo == true do (
 						fseek f FMATArr[mat].matParamArrOff #seek_set
 
 						print "--------------------"
 						print ("Texture properties for " + FMATArr[mat].matName + ":")
 						print "--------------------"
-						for m = 1 to FMATArr[mat].matParamCount do(
-							blank1 = readlong f
-							blank2 = readlong f
-							matStringOff = readlong f
-							blank3 = readlong f
-							matParamFlag = readbyte f #unsigned
-							matParamSize = readbyte f #unsigned
-							matParamStart = readshort f #unsigned
-							matParamUnk = readlong f
-							matParamIndex1 = readshort f #unsigned
-							matParamIndex2 = readshort f #unsigned
-							blank3 = readlong f
+						for m = 1 to FMATArr[mat].matParamCount do (
+							blank1 = ReadLong f
+							blank2 = ReadLong f
+							matStringOff = ReadLong f
+							blank3 = ReadLong f
+							matParamFlag = ReadByte f #unsigned
+							matParamSize = ReadByte f #unsigned
+							matParamStart = ReadShort f #unsigned
+							matParamUnk = ReadLong f
+							matParamIndex1 = ReadShort f #unsigned
+							matParamIndex2 = ReadShort f #unsigned
+							blank3 = ReadLong f
 
 							RtnMat = ftell f
 							fseek f matStringOff #seek_set
 							
-							matParamStrLen = readshort f
+							matParamStrLen = ReadShort f
 							matParamString = ReadFixedString f matParamStrLen
 							fseek f (FMATArr[mat].matParamOff + matParamStart) #seek_set
 							
 							-- Thanks, Tockdom!
 							case matParamFlag of (
 								default: (throw("Unknown param type!"))
-								0x00: (matParamVar1 = readlong f
+								0x00: (matParamVar1 = ReadLong f
 										case matParamVar1 of (
 											0: (matParamVar1 = "False")
 											1: (matParamVar1 = "True")
 										)
 									print (matParamString as string + ": " + matParamVar1 as string)
 									) -- 1 boolean
-								0x01: (matParamVar1 = readlong f; matParamVar2 = readlong f
+								0x01: (matParamVar1 = ReadLong f; matParamVar2 = ReadLong f
 										case matParamVar1 of (
 											0: (matParamVar1 = "False")
 											1: (matParamVar1 = "True")
@@ -2847,7 +2938,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 										)
 									print (matParamString as string + ": " + matParamVar1 as string + ", " + matParamVar2 as string)
 									) -- 2 booleans
-								0x02: (matParamVar1 = readlong f; matParamVar2 = readlong f; matParamVar3 = readlong f
+								0x02: (matParamVar1 = ReadLong f; matParamVar2 = ReadLong f; matParamVar3 = ReadLong f
 										case matParamVar1 of (
 											0: (matParamVar1 = "False")
 											1: (matParamVar1 = "True")
@@ -2862,7 +2953,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 										)
 									print (matParamString as string + ": " + matParamVar1 as string + ", " + matParamVar2 as string + ", " + matParamVar3 as string)
 									) -- 3 booleans
-								0x03: (matParamVar1 = readlong f; matParamVar2 = readlong f; matParamVar3 = readlong f; matParamVar4 = readlong f
+								0x03: (matParamVar1 = ReadLong f; matParamVar2 = ReadLong f; matParamVar3 = ReadLong f; matParamVar4 = ReadLong f
 										case matParamVar1 of (
 											0: (matParamVar1 = "False")
 											1: (matParamVar1 = "True")
@@ -2881,28 +2972,28 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 										)
 									print (matParamString as string + ": " + matParamVar1 as string + ", " + matParamVar2 as string + ", " + matParamVar3 as string + ", " + matParamVar4 as string)
 									) -- 4 booleans
-								0x04: (matParamVar1 = readlong f
+								0x04: (matParamVar1 = ReadLong f
 									print (matParamString as string + ": " + matParamVar1 as string)
 									) -- 1 signed integer
-								0x05: (matParamVar1 = readlong f; matParamVar2 = readlong f
+								0x05: (matParamVar1 = ReadLong f; matParamVar2 = ReadLong f
 									print (matParamString as string + ": " + matParamVar1 as string + ", " + matParamVar2 as string)
 									) -- 2 signed integers
-								0x06: (matParamVar1 = readlong f; matParamVar2 = readlong f; matParamVar3 = readlong f
+								0x06: (matParamVar1 = ReadLong f; matParamVar2 = ReadLong f; matParamVar3 = ReadLong f
 									print (matParamString as string + ": " + matParamVar1 as string + ", " + matParamVar2 as string + ", " + matParamVar3 as string)
 									) -- 3 signed integers
-								0x07: (matParamVar1 = readlong f; matParamVar2 = readlong f; matParamVar3 = readlong f; matParamVar4 = readlong f
+								0x07: (matParamVar1 = ReadLong f; matParamVar2 = ReadLong f; matParamVar3 = ReadLong f; matParamVar4 = ReadLong f
 									print (matParamString as string + ": " + matParamVar1 as string + ", " + matParamVar2 as string + ", " + matParamVar3 as string + ", " + matParamVar4 as string)
 									) -- 4 signed integers
-								0x08: (matParamVar1 = readlong f #unsigned
+								0x08: (matParamVar1 = ReadLong f #unsigned
 									print (matParamString as string + ": " + matParamVar1 as string)
 									) -- 1 unsigned integer
-								0x09: (matParamVar1 = readlong f #unsigned; matParamVar2 = readlong f #unsigned
+								0x09: (matParamVar1 = ReadLong f #unsigned; matParamVar2 = ReadLong f #unsigned
 									print (matParamString as string + ": " + matParamVar1 as string + ", " + matParamVar2 as string)
 									) -- 2 unsigned integers
-								0x0A: (matParamVar1 = readlong f #unsigned; matParamVar2 = readlong f #unsigned; matParamVar3 = readlong f #unsigned
+								0x0A: (matParamVar1 = ReadLong f #unsigned; matParamVar2 = ReadLong f #unsigned; matParamVar3 = ReadLong f #unsigned
 									print (matParamString as string + ": " + matParamVar1 as string + ", " + matParamVar2 as string + ", " + matParamVar3 as string)
 									) -- 3 unsigned integers
-								0x0B: (matParamVar1 = readlong f #unsigned; matParamVar2 = readlong f #unsigned; matParamVar3 = readlong f #unsigned; matParamVar4 = readlong f #unsigned
+								0x0B: (matParamVar1 = ReadLong f #unsigned; matParamVar2 = ReadLong f #unsigned; matParamVar3 = ReadLong f #unsigned; matParamVar4 = ReadLong f #unsigned
 									print (matParamString as string + ": " + matParamVar1 as string + ", " + matParamVar2 as string + ", " + matParamVar3 as string + ", " + matParamVar4 as string)
 									) -- 4 unsigned integers
 								0x0C: (matParamVar1 = readfloat f
@@ -2977,16 +3068,16 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 								0x1D: (matParamSRTXScl = readfloat f; matParamSRTYScl = readfloat f; matParamSRTZScl = readfloat f; matParamSRTXRot = readfloat f; matParamSRTYRot = readfloat f; matParamSRTZRot = readfloat f; matParamSRTXTrs = readfloat f; matParamSRTYTrs = readfloat f; matParamSRTZTrs = readfloat f
 									print (matParamString as string + ": 3D Scale X = " + matParamSRTXScl as string + ", Y = " + matParamSRTYScl as string + ", Z = " + matParamSRTZScl as string + " | Rotate X = " + matParamSRTXRot as string + ", Y = " + matParamSRTYRot as string + ", Z = " + matParamSRTZRot as string + " | Translation X = " + matParamSRTXTrs as string + ", Y = " + matParamSRTYTrs as string + ", Z = " + matParamSRTZTrs as string)
 									) -- 3D SRT
-								0x1E: (matParamAxis = readlong f; matParamSRTXScl = readfloat f; matParamSRTYScl = readfloat f; matParamSRTRot = readfloat f; matParamSRTXTrs = readfloat f; matParamSRTYTrs = readfloat f
-									case matParamAxis of(
+								0x1E: (matParamAxis = ReadLong f; matParamSRTXScl = readfloat f; matParamSRTYScl = readfloat f; matParamSRTRot = readfloat f; matParamSRTXTrs = readfloat f; matParamSRTYTrs = readfloat f
+									case matParamAxis of (
 										0: (matParamAxis = "Maya")
 										1: (matParamAxis = "3DS Max")
 										2: (matParamAxis = "Softimage")
 									)
 									print (matParamString as string + ": Scale X = " + matParamSRTXScl as string + ", Y = " + matParamSRTYScl as string + " | Rotate = " + matParamSRTRot as string + " | Translation X = " + matParamSRTXTrs as string + ", Y = " + matParamSRTYTrs as string + " | Axis: " + matParamAxis as string)
 									) -- Texture SRT
-								0x1F: (matParamAxis = readlong f; matParamSRTXScl = readfloat f; matParamSRTYScl = readfloat f; matParamSRTRot = readfloat f; matParamSRTXTrs = readfloat f; matParamSRTYTrs = readfloat f; matParamSRTMatPtr = readlong f
-									case matParamAxis of(
+								0x1F: (matParamAxis = ReadLong f; matParamSRTXScl = readfloat f; matParamSRTYScl = readfloat f; matParamSRTRot = readfloat f; matParamSRTXTrs = readfloat f; matParamSRTYTrs = readfloat f; matParamSRTMatPtr = ReadLong f
+									case matParamAxis of (
 										0: (matParamAxis = "Maya")
 										1: (matParamAxis = "3DS Max")
 										2: (matParamAxis = "Softimage")
@@ -3005,7 +3096,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 				-- F_Skeleton Header --
 				fseek f fmdl_info.fsklOff#seek_set
-				case of(
+				case of (
 					(verNumA == 0 and verNumB < 8):(
 						-- < v0.8.0.0
 						fskl_info=(fsklh \
@@ -3090,15 +3181,15 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 				-- Node Setup --
 				fseek f fskl_info.invIndxArrOff #seek_set
-				for nodes = 1 to (fskl_info.invIndxArrCount + fskl_info.exIndxCount) do(
+				for nodes = 1 to (fskl_info.invIndxArrCount + fskl_info.exIndxCount) do (
 					NodeID = ReadShort f + 1
 					append Node_Array NodeID
 				)
 
 				-- F_Shape Header --
 				fseek f fmdl_info.fshpIndx#seek_set
-				For shp = 1 to fmdl_info.fshpCount Do(
-					case of(
+				for shp = 1 to fmdl_info.fshpCount do (
+					case of (
 						default:(throw ("Unexpected FSHP header!"))
 						(verNumA == 0 and verNumB < 9):(
 							fshp_info=(fshph \
@@ -3180,7 +3271,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 					)
 					Rtn = ftell f
 					fseek f fshp_info.polyName #seek_set
-					polyNameStrLen = readshort f #unsigned
+					polyNameStrLen = ReadShort f #unsigned
 					fshp_info.polyName = ReadFixedString f polyNameStrLen
 					append FSHPArr(fshp_info)
 					printDebug fshp_info
@@ -3189,8 +3280,8 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 				-- F_Model Bone Creation --
 				fseek f fskl_info.boneArrOff#seek_set
-				For bn = 1 to fskl_info.boneArrCount Do(
-					case of(
+				for bn = 1 to fskl_info.boneArrCount do (
+					case of (
 						default:(throw ("Unexpected FSKL header!"))
 						(verNumA == 0 and verNumB < 8):(
 							boneData=( bdata \
@@ -3286,16 +3377,16 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 					Rtn = ftell f
 					fseek f boneData.bName #seek_set
-					boneNameStrLen = readshort f #unsigned
+					boneNameStrLen = ReadShort f #unsigned
 					boneData.bName = ReadFixedString f boneNameStrLen
 					fseek f Rtn #seek_set
 
-					if boneData.bFlags == 0x0001 then(
-						if (bit.and boneData.bFlags2 0x0080) == 0x0000 then(tfm = inverse (scaleMatrix [boneData.scaleX,boneData.scaleY,boneData.scaleZ])) else (tfm = inverse (scaleMatrix [1,1,1]))
+					if boneData.bFlags == 0x0001 then (
+						if (bit.and boneData.bFlags2 0x0080) == 0x0000 then (tfm = inverse (scaleMatrix [boneData.scaleX,boneData.scaleY,boneData.scaleZ])) else (tfm = inverse (scaleMatrix [1,1,1]))
 						tfm = tfm * (quat boneData.rotX boneData.rotY boneData.rotZ boneData.rotW) as matrix3
 						tfm = inverse(tfm)
 					)else(
-						if (bit.and boneData.bFlags2 0x0080) == 0x0000 then(tfm = scaleMatrix [boneData.scaleX,boneData.scaleY,boneData.scaleZ]) else (tfm = scaleMatrix [1,1,1])
+						if (bit.and boneData.bFlags2 0x0080) == 0x0000 then (tfm = scaleMatrix [boneData.scaleX,boneData.scaleY,boneData.scaleZ]) else (tfm = scaleMatrix [1,1,1])
 						tfm = tfm * (eulerangles (boneData.rotX*(180/pi)) (boneData.rotY*(180/pi)) (boneData.rotZ*(180/pi))) as matrix3
 					)
 					tfm.row4 = [boneData.posX,boneData.posY,boneData.posZ]
@@ -3306,7 +3397,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						(normalize tfm.row3)
 
 					boneName = boneData.bName
-					if FMDLList_array.count > 1 do(boneName += "_" + x as string)
+					if FMDLList_array.count > 1 do (boneName += "_" + x as string)
 					fseek f Rtn#seek_set
 					newBone.name = boneName
 					newBone.width = 0.03
@@ -3318,7 +3409,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 					newBone.pos.controller = TCB_position()
 					newBone.rotation.controller = TCB_rotation()
 
-					If boneData.parIndx1 != 0 Do(
+					if boneData.parIndx1 != 0 do (
 						newBone.parent = BoneArray[boneData.parIndx1]
 						newBone.transform *= BoneArray[boneData.parIndx1].transform
 					)
@@ -3336,8 +3427,18 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 				DataStart = ReadLong f
 				
 				-- Mesh Building --
-				For m = 1 to FSHPArr.count Do(
+				for m = 1 to FSHPArr.count do (
 					Vert_Array = #()
+					Vert1_Array = #()
+					Vert2_Array = #()
+					Vert3_Array = #()
+					Vert4_Array = #()
+					Vert5_Array = #()
+					Vert6_Array = #()
+					Vert7_Array = #()
+					Vert8_Array = #()
+					Vert9_Array = #()
+					Vert10_Array = #()
 					Normal_Array = #()
 					UV_Array = #()
 					UV2_Array = #()
@@ -3353,17 +3454,30 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 					W1_array = #()
 					W2_array = #()
 					Weight_array = #()
+					VertGroupNum = 1
 
 					MeshName = FSHPArr[m].polyName
 					fseek f FVTXArr[FSHPArr[m].fvtxIndx].attArrOff#seek_set
 					printDebug("Building polygon " + MeshName + "...")
-					For att = 1 to FVTXArr[FSHPArr[m].fvtxIndx].attCount Do(
+					for att = 1 to FVTXArr[FSHPArr[m].fvtxIndx].attCount do (
 						AttTypeOff = ReadLong f
 						Padding = ReadLong f 
 						Rtn1 = ftell f
 						fseek f AttTypeOff#seek_set
 						AttTypeLength = ReadShort f #unsigned
 						AttType = ReadFixedString f AttTypeLength
+						case AttType of (
+							"_p1":(VertGroupNum = 2)
+							"_p2":(VertGroupNum = 3)
+							"_p3":(VertGroupNum = 4)
+							"_p4":(VertGroupNum = 5)
+							"_p5":(VertGroupNum = 6)
+							"_p6":(VertGroupNum = 7)
+							"_p7":(VertGroupNum = 8)
+							"_p8":(VertGroupNum = 9)
+							"_p9":(VertGroupNum = 10)
+							"_p10":(VertGroupNum = 11)
+						)
 						fseek f Rtn1#seek_set
 						vertType = ReadBEShort f
 						Padding = ReadShort f 
@@ -3373,24 +3487,24 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 					)
 					printDebug AttrArr
 
-					For buf = 1 to FVTXArr[FSHPArr[m].fvtxIndx].buffCount Do(
+					for buf = 1 to FVTXArr[FSHPArr[m].fvtxIndx].buffCount do (
 						fseek f (FVTXArr[FSHPArr[m].fvtxIndx].vtxBuffSizeOff + ((buf - 1) * 0x10)) #seek_set
 						BuffSize = ReadLong f
 						fseek f (FVTXArr[FSHPArr[m].fvtxIndx].vtxStrideSizeOff + ((buf - 1) * 0x10)) #seek_set
 						StrideSize = ReadLong f
-						if buf == 1 Do(DataOffset = (DataStart + FVTXArr[FSHPArr[m].fvtxIndx].buffOff))
-						if buf > 1 Do(DataOffset = BuffArr[buf - 1].DataOffset + BuffArr[buf - 1].BuffSize)
+						if buf == 1 do (DataOffset = (DataStart + FVTXArr[FSHPArr[m].fvtxIndx].buffOff))
+						if buf > 1 do (DataOffset = BuffArr[buf - 1].DataOffset + BuffArr[buf - 1].BuffSize)
 						DataAlign = (bit.and (DataOffset) 0x7)
-						if DataAlign != 0 Do(DataOffset = DataOffset + (8 - DataAlign))
+						if DataAlign != 0 do (DataOffset = DataOffset + (8 - DataAlign))
 						append BuffArr (buffData buffSize: BuffSize strideSize: StrideSize dataOffset: DataOffset)
 					)
 					printDebug BuffArr
 					
-					For attr = 1 to AttrArr.count Do(
+					for attr = 1 to AttrArr.count do (
 						locPoint = ((BuffArr[AttrArr[attr].buffIndx].dataOffset) + (AttrArr[attr].buffOff))
 						fseek f locPoint #seek_set
-						if attr == 1 do(printDebug("Vertex buffer starts at 0x" + bit.intAsHex(ftell f) as string))
-						For v = 1 to FVTXArr[FSHPArr[m].fvtxIndx].vertCount Do(
+						if attr == 1 do (printDebug("Vertex buffer starts at 0x" + bit.intAsHex(ftell f) as string))
+						for v = 1 to FVTXArr[FSHPArr[m].fvtxIndx].vertCount do (
 							VertStart = (ftell f + (BuffArr[AttrArr[attr].buffIndx].strideSize))
 							case AttrArr[attr].vertType of (
 								default: (
@@ -3651,11 +3765,47 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 								(AttrArr[attr].attName == "_p0"):(
 									append vert_Array[var1,var2,var3]
 								)
+								(AttrArr[attr].attName == "_p1"):(
+									append vert1_Array[var1,var2,var3]
+								)
+								(AttrArr[attr].attName == "_p2"):(
+									append vert2_Array[var1,var2,var3]
+								)
+								(AttrArr[attr].attName == "_p3"):(
+									append vert3_Array[var1,var2,var3]
+								)
+								(AttrArr[attr].attName == "_p4"):(
+									append vert4_Array[var1,var2,var3]
+								)
+								(AttrArr[attr].attName == "_p5"):(
+									append vert5_Array[var1,var2,var3]
+								)
+								(AttrArr[attr].attName == "_p6"):(
+									append vert6_Array[var1,var2,var3]
+								)
+								(AttrArr[attr].attName == "_p7"):(
+									append vert7_Array[var1,var2,var3]
+								)
+								(AttrArr[attr].attName == "_p8"):(
+									append vert8_Array[var1,var2,var3]
+								)
+								(AttrArr[attr].attName == "_p9"):(
+									append vert9_Array[var1,var2,var3]
+								)
+								(AttrArr[attr].attName == "_p10"):(
+									append vert10_Array[var1,var2,var3]
+								)
 								--Color Info--
 								(AttrArr[attr].attName == "_c0"):(
 									case of (
 										(AttrArr[attr].vertType == 0x010B):(
 											var4 = vRange 0 1 (var4 as float / 255)
+										)
+										(AttrArr[attr].vertType == 0x020B):(
+											var1 = vRange 0 254 (var1 * 2)
+											var2 = vRange 0 254 (var2 * 2)
+											var3 = vRange 0 254 (var3 * 2)
+											var4 = vRange 0 1 (var4 as float / 127)
 										)
 										(AttrArr[attr].vertType == 0x0515):(
 											var1 = vRange 0 255 (var1 * 255)
@@ -3664,7 +3814,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 											var4 = vRange 0 1 (var4 as float)
 										)
 									)
-									if VertColors == 1 do(
+									if VertColors == 1 do (
 										append Color_Array[var1,var2,var3]
 										append Alpha_Array var4
 									)
@@ -3690,7 +3840,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 									var2 *= 2
 									append UV3_array [var1,var2,0]
 								)
-								(AttrArr[attr].attName == "_u0" or AttrArr[attr].attName == "color" or AttrArr[attr].attName == "_u1" or AttrArr[attr].attName == "_u2" or AttrArr[attr].attName == "_u3" or AttrArr[attr].attName == "_u4" or AttrArr[attr].attName == "All"):(
+								(AttrArr[attr].attName == "_u0" or AttrArr[attr].attName == "color" or AttrArr[attr].attName == "_u1" or AttrArr[attr].attName == "_u2" or AttrArr[attr].attName == "_u3" or AttrArr[attr].attName == "_u4" or AttrArr[attr].attName == "All" or AttrArr[attr].attName == "_g3d_02_u0_u1" or AttrArr[attr].attName == "_g3d_02_u2_u0" or AttrArr[attr].attName == "_g3d_02_u2_u3" or AttrArr[attr].attName == "_g3d_02__u0"):(
 									case AttrArr[attr].vertType of (
 										default:(var2 = (var2 * -1) + 1)
 										0x0109:(
@@ -3718,12 +3868,20 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 											)
 										)
 									)
-									case of(
+									case of (
 										(AttrArr[attr].attName == "_u0" or AttrArr[attr].attName == "color"): append UV_Array[var1,var2,0]
 										(AttrArr[attr].attName == "_u1"): append UV2_Array[var1,var2,0]
-										(AttrArr[attr].attName == "_u2"): append UV3_Array[var1,var2,0]
+										(AttrArr[attr].attName == "_u2" or AttrArr[attr].attName == "_g3d_02_u2_u0"): append UV3_Array[var1,var2,0]
 										(AttrArr[attr].attName == "_u3"): append UV4_Array[var1,var2,0]
-										(AttrArr[attr].attName == "_u4" or AttrArr[attr].attName == "All"): append UV5_Array[var1,var2,0]
+										(AttrArr[attr].attName == "_u4" or AttrArr[attr].attName == "_g3d_02__u0" or AttrArr[attr].attName == "All"): append UV5_Array[var1,var2,0]
+										(AttrArr[attr].attName == "_g3d_02_u0_u1"):(
+											append UV_Array[var1,var2,0]
+											append UV2_Array[var3,var4,0]
+										)
+										(AttrArr[attr].attName == "_g3d_02_u2_u3"):(
+											append UV3_Array[var1,var2,0]
+											append UV4_Array[var3,var4,0]
+										)
 									)
 								)
 								--BlendIndex Info--
@@ -3763,7 +3921,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 											weight2 = var2 as float / 255
 											weight3 = var3 as float / 255
 											weight4 = var4 as float / 255
-											if weight4 >= 1 do(weight4 = 0)
+											if weight4 >= 1 do (weight4 = 0)
 										)
 										0x0112:(
 											weight1 = var1 as float / 65535
@@ -3776,7 +3934,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 											weight2 = var2 as float / 65535
 											weight3 = var3 as float / 65535
 											weight4 = var4 as float / 65535
-											if weight4 >= 1 do(weight4 = 0)
+											if weight4 >= 1 do (weight4 = 0)
 										)
 										0x0518:(
 											weight1 = var1
@@ -3796,33 +3954,33 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						) -- Close Vert Read Loop
 					) -- Close Attributes Loop
 
-					If UV_Array.count == 0 Do(
-						For uv = 1 to Vert_array.count Do append UV_Array[0,0,0]
+					if UV_Array.count == 0 do (
+						for uv = 1 to Vert_array.count do append UV_Array[0,0,0]
 					)
 
-					if VertColors == 1 do(
-						If Color_Array.count == 0 Do(
-							For ca = 1 to Vert_array.count Do (
+					if VertColors == 1 do (
+						if Color_Array.count == 0 do (
+							for ca = 1 to Vert_array.count do (
 								append Color_Array[255,255,255]
 								append Alpha_Array 1
 							)
 						)
 					)
 
-					If W1_Array.count == 0 Do(
-						For v = 1 to B1_array.count Do(
+					if W1_Array.count == 0 do (
+						for v = 1 to B1_array.count do (
 							append W1_Array (Weight_Info_Struct weight1:1 weight2:0 weight3:0 weight4:0)
 						)
 					)
 
-					If B2_Array.count == 0 Do(
-						For v = 1 to B1_array.count Do(
+					if B2_Array.count == 0 do (
+						for v = 1 to B1_array.count do (
 							append B2_Array (Bone_Info_Struct bone1:1 bone2:1 bone3:1 bone4:1)
 							append W2_Array (Weight_Info_Struct weight1:0 weight2:0 weight3:0 weight4:0)
 						)
 					)
 
-					for b = 1 to W1_Array.count Do(
+					for b = 1 to W1_Array.count do (
 						w = (weight_data boneids:#() weights:#())
 						maxweight = 0
 						
@@ -3835,43 +3993,43 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						if W2_array[b].Weight3 != 0 do maxweight += W2_array[b].Weight3
 						if W2_array[b].Weight4 != 0 do maxweight += W2_array[b].Weight4
 
-						if maxweight != 0 then(
-							if W1_array[b].Weight1 != 0 then(
+						if maxweight != 0 then (
+							if W1_array[b].Weight1 != 0 then (
 								w1 = W1_array[b].Weight1 as float
 								append w.boneids (B1_array[b].Bone1)
 								append w.weights (w1)
 							)
-							if W1_array[b].Weight2 != 0 then(
+							if W1_array[b].Weight2 != 0 then (
 								w2 = W1_array[b].Weight2 as float
 								append w.boneids (B1_array[b].Bone2)
 								append w.weights (w2)
 							)
-							if W1_array[b].Weight3 != 0 then(
+							if W1_array[b].Weight3 != 0 then (
 								w3 = W1_array[b].Weight3 as float
 								append w.boneids (B1_array[b].Bone3)
 								append w.weights (w3)
 							)
-							if W1_array[b].Weight4 != 0 then(
+							if W1_array[b].Weight4 != 0 then (
 								w4 = W1_array[b].Weight4 as float
 								append w.boneids (B1_array[b].Bone4)
 								append w.weights (w4)
 							)
-							if W2_array[b].Weight1 != 0 then(
+							if W2_array[b].Weight1 != 0 then (
 								w5 = W2_array[b].Weight1 as float
 								append w.boneids (B2_array[b].Bone1)
 								append w.weights (w5)
 							)
-							if W2_array[b].Weight2 != 0 then(
+							if W2_array[b].Weight2 != 0 then (
 								w6 = W2_array[b].Weight2 as float
 								append w.boneids (B2_array[b].Bone2)
 								append w.weights (w6)
 							)
-							if W2_array[b].Weight3 != 0 then(
+							if W2_array[b].Weight3 != 0 then (
 								w7 = W2_array[b].Weight3 as float
 								append w.boneids (B2_array[b].Bone3)
 								append w.weights (w7)
 							)
-							if W2_array[b].Weight4 != 0 then(
+							if W2_array[b].Weight4 != 0 then (
 								w8 = W2_array[b].Weight4 as float
 								append w.boneids (B2_array[b].Bone4)
 								append w.weights (w8)
@@ -3882,7 +4040,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 					fseek f FSHPArr[m].lodMdlOff#seek_set
 					if LODs == 2 do FSHPArr[m].lodMdlCount = 1
-					for l = 1 to FSHPArr[m].lodMdlCount do(
+					for l = 1 to FSHPArr[m].lodMdlCount do (
 						Face_Array = #()
 
 						fseek f 32 #seek_cur
@@ -3900,7 +4058,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						case of (
 							(faceType == 1):(
 							FaceCount = (FaceCount/3)
-							For face = 1 to FaceCount Do(
+							for face = 1 to FaceCount do (
 								fa = ((ReadShort f #unsigned) + 1 + PolyStart)
 								fb = ((ReadShort f #unsigned) + 1 + PolyStart)
 								fc = ((ReadShort f #unsigned) + 1 + PolyStart)
@@ -3909,7 +4067,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 							)
 							(faceType == 2):(
 							FaceCount = (FaceCount/3)
-							For face = 1 to FaceCount Do(
+							for face = 1 to FaceCount do (
 								fa = ((ReadLong f) + 1 + PolyStart)
 								fb = ((ReadLong f) + 1 + PolyStart)
 								fc = ((ReadLong f) + 1 + PolyStart)
@@ -3918,7 +4076,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 							)
 						)
 
-						if VertColors == 1 do(
+						if VertColors == 1 do (
 							local Cac=Color_Array.count
 						)
 						local Vac=Vert_Array.count
@@ -3927,339 +4085,386 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						local Bac=BoneArray.count
 						local Wac=Weight_array.count
 
-						msh = mesh vertices:Vert_array faces:Face_array
-						msh.numTVerts = Vac
-						setNumCPVVerts msh msh.numTVerts
-						defaultVCFaces msh
-						buildTVFaces msh
-						if VertColors == 1 do(
-							setCVertMode msh true
-							setShadeCVerts msh true
-							for j = 1 to Cac do setvertcolor msh j Color_array[j]
-							for j = 1 to Cac do(meshop.setVertAlpha msh -2 j Alpha_array[j])
-						)
-
-						If Vac == UV_Array.count Do(
-							for j = 1 to Vac do setTVert msh j UV_array[j]
-							for j = 1 to Fac do setTVFace msh j Face_array[j]
-						)
-						for j = 1 to msh.numfaces do setFaceSmoothGroup msh j 1
-
-						MeshMat = buildMatSwitch \
-							matName:FMATArr[FSHPArr[m].fmatIndx].MatName \
-							tSelOff:FMATArr[FSHPArr[m].fmatIndx].texSelOff \
-							rtnTexAS:FMATArr[FSHPArr[m].fmatIndx].texAttIndxOff \
-							tCount:FMATArr[FSHPArr[m].fmatIndx].texSelCount \
-							tFormat:TexF[TexFormat] \
-							tPath:TexP[TexPath]
-
-						msh.name = MeshName + (if FSHPArr[m].lodMdlCount == 1 then "" else " (LOD: " + l as string + ")")
-						msh.material = MeshMat
-
-						max modify mode
-						select msh
-
-						addmodifier msh (Edit_Normals()) ui:off
-						msh.Edit_Normals.MakeExplicit selection:#{1..Normal_array.count}
-						EN_convertVS = msh.Edit_Normals.ConvertVertexSelection
-						EN_setNormal = msh.Edit_Normals.SetNormal
-						normID = #{}
-						for v = 1 to Nac do(
-							free normID
-							EN_convertVS #{v} &normID
-							for id in normID do EN_setNormal id Normal_array[v]
-						)
-
-						if Bac > 0 do(
-							if FSHPArr[m].matrFlag == 0 then(
-								$.transform = BoneFixArray[FSHPArr[m].fsklIndx]
-								if RigModel != 3 do(
-									if RigModel == 1 then(
-										$.pivot = [0,0,0]
-										ResetXForm $
-										CollapseStack $	
-									)
-									skinMod = skin()
-									addModifier msh skinMod
-									maxbone = getnodebyname BoneArray[FSHPArr[m].fsklIndx].name
-									skinOps.addBone skinMod maxbone 0
+						for v = 1 to VertGroupNum do (
+							case v of (
+								1: (
+									msh = mesh vertices:Vert_array faces:Face_array
+									msh.name = MeshName + (if FSHPArr[m].lodMdlCount == 1 then "" else " (LOD: " + l as string + ")")
 								)
-							)else(
-								if RigModel != 3 do(
-									skinMod = skin()
-									boneIDMap = #()
-									addModifier msh skinMod
-									msh.Skin.weightAllVertices = false
+								2: (
+									msh = mesh vertices:Vert1_array faces:Face_array
+									msh.name = MeshName + " [Morph 1]" + (if FSHPArr[m].lodMdlCount == 1 then "" else " (LOD: " + l as string + ")")
+								)
+								3: (
+									msh = mesh vertices:Vert2_array faces:Face_array
+									msh.name = MeshName + " [Morph 2]" + (if FSHPArr[m].lodMdlCount == 1 then "" else " (LOD: " + l as string + ")")
+								)
+								4: (
+									msh = mesh vertices:Vert3_array faces:Face_array
+									msh.name = MeshName + " [Morph 3]" + (if FSHPArr[m].lodMdlCount == 1 then "" else " (LOD: " + l as string + ")")
+								)
+								5: (
+									msh = mesh vertices:Vert4_array faces:Face_array
+									msh.name = MeshName + " [Morph 4]" + (if FSHPArr[m].lodMdlCount == 1 then "" else " (LOD: " + l as string + ")")
+								)
+								6: (
+									msh = mesh vertices:Vert5_array faces:Face_array
+									msh.name = MeshName + " [Morph 5]" + (if FSHPArr[m].lodMdlCount == 1 then "" else " (LOD: " + l as string + ")")
+								)
+								7: (
+									msh = mesh vertices:Vert6_array faces:Face_array
+									msh.name = MeshName + " [Morph 6]" + (if FSHPArr[m].lodMdlCount == 1 then "" else " (LOD: " + l as string + ")")
+								)
+								8: (
+									msh = mesh vertices:Vert7_array faces:Face_array
+									msh.name = MeshName + " [Morph 7]" + (if FSHPArr[m].lodMdlCount == 1 then "" else " (LOD: " + l as string + ")")
+								)
+								9: (
+									msh = mesh vertices:Vert8_array faces:Face_array
+									msh.name = MeshName + " [Morph 8]" + (if FSHPArr[m].lodMdlCount == 1 then "" else " (LOD: " + l as string + ")")
+								)
+								10: (
+									msh = mesh vertices:Vert9_array faces:Face_array
+									msh.name = MeshName + " [Morph 9]" + (if FSHPArr[m].lodMdlCount == 1 then "" else " (LOD: " + l as string + ")")
+								)
+								11: (
+									msh = mesh vertices:Vert10_array faces:Face_array
+									msh.name = MeshName + " [Morph 10]" + (if FSHPArr[m].lodMdlCount == 1 then "" else " (LOD: " + l as string + ")")
+								)
+							)
+							
+							msh.numTVerts = Vac
+							setNumCPVVerts msh msh.numTVerts
+							defaultVCFaces msh
+							buildTVFaces msh
+							if VertColors == 1 do (
+								setCVertMode msh true
+								setShadeCVerts msh true
+								for j = 1 to Cac do setvertcolor msh j Color_array[j]
+								for j = 1 to Cac do (meshop.setVertAlpha msh -2 j Alpha_array[j])
+							)
 
-									if FSHPArr[m].matrFlag == 1 do(for b in BoneArray do b.transform = matrix3 1)
+							if Vac == UV_Array.count do (
+								for j = 1 to Vac do setTVert msh j UV_array[j]
+								for j = 1 to Fac do setTVFace msh j Face_array[j]
+							)
+							for j = 1 to msh.numfaces do setFaceSmoothGroup msh j 1
 
-									for i = 1 to Bac do(
-										maxbone = getnodebyname BoneArray[i].name
-										skinOps.addBone skinMod maxbone (if i != Bac then 0 else 1)
-									)
+							MeshMat = buildMatSwitch \
+								matName:FMATArr[FSHPArr[m].fmatIndx].MatName \
+								tSelOff:FMATArr[FSHPArr[m].fmatIndx].texSelOff \
+								rtnTexAS:FMATArr[FSHPArr[m].fmatIndx].texAttIndxOff \
+								tCount:FMATArr[FSHPArr[m].fmatIndx].texSelCount \
+								tFormat:TexF[TexFormat] \
+								tPath:TexP[TexPath]
 
-									local numSkinBones = skinOps.GetNumberBones skinMod
-									for i = 1 to numSkinBones do(
-										local boneName = skinOps.GetBoneName skinMod i 0
-										for j = 1 to Bac do(
-											if boneName == BoneArray[j].Name do(h
-												boneIDMap[j] = i
-												j = Bac + 1
-											)
-										)
-									) -- Thanks to sunnydavis for the fix!
+							msh.material = MeshMat
 
-									modPanel.setCurrentObject skinMod
+							max modify mode
+							select msh
 
-									for i = 1 to Vac do(
-										skinOps.SetVertexWeights skinMod i 1 1
-										skinOps.unnormalizeVertex skinMod i true 
-										skinOps.SetVertexWeights skinMod i 1 0
-										skinOps.unnormalizeVertex skinMod i false
-									)
-									skinOps.RemoveZeroWeights skinMod
+							addmodifier msh (Edit_Normals()) ui:off
+							msh.Edit_Normals.MakeExplicit selection:#{1..Normal_array.count}
+							EN_convertVS = msh.Edit_Normals.ConvertVertexSelection
+							EN_setNormal = msh.Edit_Normals.SetNormal
+							normID = #{}
+							for v = 1 to Nac do (
+								free normID
+								EN_convertVS #{v} &normID
+								for id in normID do EN_setNormal id Normal_array[v]
+							)
 
-									for i = 1 to Wac do(
-										w = Weight_array[i]
-										bi = #() --bone index array
-										wv = #() --weight value array
-										wbic = w.boneids.count
-
-										for j = 1 to wbic do(
-											boneid = w.boneids[j]
-											weight = w.weights[j]
-											append bi boneIDMap[boneid]
-											append wv weight
-										)
-										skinOps.ReplaceVertexWeights skinMod i bi wv
-									)
-
-									if FSHPArr[m].matrFlag == 1 do(
-										for b = 1 to Bac do(BoneArray[b].transform = BoneFixArray[b])
-										if RigModel == 1 then(
+							if Bac > 0 do (
+								if FSHPArr[m].matrFlag == 0 then (
+									$.transform = BoneFixArray[FSHPArr[m].fsklIndx]
+									if RigModel != 3 do (
+										if RigModel == 1 then (
 											$.pivot = [0,0,0]
 											ResetXForm $
 											CollapseStack $	
-											-- Two-pass rigging to fix "meatballing".
-											skinMod = skin()
-											boneIDMap = #()
-											addModifier msh skinMod
-											msh.Skin.weightAllVertices = false
+										)
+										skinMod = skin()
+										addModifier msh skinMod
+										maxbone = getnodebyname BoneArray[FSHPArr[m].fsklIndx].name
+										skinOps.addBone skinMod maxbone 0
+									)
+								)else(
+									if RigModel != 3 do (
+										skinMod = skin()
+										boneIDMap = #()
+										addModifier msh skinMod
+										msh.Skin.weightAllVertices = false
 
-											for i = 1 to Bac do(
-												maxbone = getnodebyname BoneArray[i].name
-												skinOps.addBone skinMod maxbone (if i != Bac then 0 else 1)
+										if FSHPArr[m].matrFlag == 1 do (for b in BoneArray do b.transform = matrix3 1)
+
+										for i = 1 to Bac do (
+											maxbone = getnodebyname BoneArray[i].name
+											skinOps.addBone skinMod maxbone (if i != Bac then 0 else 1)
+										)
+
+										local numSkinBones = skinOps.GetNumberBones skinMod
+										for i = 1 to numSkinBones do (
+											local boneName = skinOps.GetBoneName skinMod i 0
+											for j = 1 to Bac do (
+												if boneName == BoneArray[j].Name do (h
+													boneIDMap[j] = i
+													j = Bac + 1
+												)
 											)
+										) -- Thanks to sunnydavis for the fix!
 
-											local numSkinBones = skinOps.GetNumberBones skinMod
-											for i = 1 to numSkinBones do(
-												local boneName = skinOps.GetBoneName skinMod i 0
-												for j = 1 to Bac do(
-													if boneName == BoneArray[j].Name do(h
-														boneIDMap[j] = i
-														j = Bac + 1
+										modPanel.setCurrentObject skinMod
+
+										for i = 1 to Vac do (
+											skinOps.SetVertexWeights skinMod i 1 1
+											skinOps.unnormalizeVertex skinMod i true 
+											skinOps.SetVertexWeights skinMod i 1 0
+											skinOps.unnormalizeVertex skinMod i false
+										)
+										skinOps.RemoveZeroWeights skinMod
+
+										for i = 1 to Wac do (
+											w = Weight_array[i]
+											bi = #() --bone index array
+											wv = #() --weight value array
+											wbic = w.boneids.count
+
+											for j = 1 to wbic do (
+												boneid = w.boneids[j]
+												weight = w.weights[j]
+												append bi boneIDMap[boneid]
+												append wv weight
+											)
+											skinOps.ReplaceVertexWeights skinMod i bi wv
+										)
+
+										if FSHPArr[m].matrFlag == 1 do (
+											for b = 1 to Bac do (BoneArray[b].transform = BoneFixArray[b])
+											if RigModel == 1 then (
+												$.pivot = [0,0,0]
+												ResetXForm $
+												CollapseStack $	
+												-- Two-pass rigging to fix "meatballing".
+												skinMod = skin()
+												boneIDMap = #()
+												addModifier msh skinMod
+												msh.Skin.weightAllVertices = false
+
+												for i = 1 to Bac do (
+													maxbone = getnodebyname BoneArray[i].name
+													skinOps.addBone skinMod maxbone (if i != Bac then 0 else 1)
+												)
+
+												local numSkinBones = skinOps.GetNumberBones skinMod
+												for i = 1 to numSkinBones do (
+													local boneName = skinOps.GetBoneName skinMod i 0
+													for j = 1 to Bac do (
+														if boneName == BoneArray[j].Name do (h
+															boneIDMap[j] = i
+															j = Bac + 1
+														)
 													)
+												) -- Thanks to sunnydavis for the fix!
+
+												modPanel.setCurrentObject skinMod
+
+												for i = 1 to Vac do (
+													skinOps.SetVertexWeights skinMod i 1 1
+													skinOps.unnormalizeVertex skinMod i true 
+													skinOps.SetVertexWeights skinMod i 1 0
+													skinOps.unnormalizeVertex skinMod i false
 												)
-											) -- Thanks to sunnydavis for the fix!
+												skinOps.RemoveZeroWeights skinMod
 
-											modPanel.setCurrentObject skinMod
+												for i = 1 to Wac do (
+													w = Weight_array[i]
+													bi = #() --bone index array
+													wv = #() --weight value array
+													wbic = w.boneids.count
 
-											for i = 1 to Vac do(
-												skinOps.SetVertexWeights skinMod i 1 1
-												skinOps.unnormalizeVertex skinMod i true 
-												skinOps.SetVertexWeights skinMod i 1 0
-												skinOps.unnormalizeVertex skinMod i false
-											)
-											skinOps.RemoveZeroWeights skinMod
-
-											for i = 1 to Wac do(
-												w = Weight_array[i]
-												bi = #() --bone index array
-												wv = #() --weight value array
-												wbic = w.boneids.count
-
-												for j = 1 to wbic do(
-													boneid = w.boneids[j]
-													weight = w.weights[j]
-													append bi boneIDMap[boneid]
-													append wv weight
+													for j = 1 to wbic do (
+														boneid = w.boneids[j]
+														weight = w.weights[j]
+														append bi boneIDMap[boneid]
+														append wv weight
+													)
+													skinOps.ReplaceVertexWeights skinMod i bi wv
 												)
-												skinOps.ReplaceVertexWeights skinMod i bi wv
 											)
 										)
 									)
 								)
 							)
-						)
 
-						local UVarrays = #(UV2_array,UV3_array,UV4_array,UV5_array)
-						case UVLayers of(
-							1:(
-								for uva=1 to UVarrays.count do(
-									local uvac=UVarrays[uva].count
-									if uvac > 0 do(
-										meshop.setNumMaps msh (uva+2) keep:true
-										for i = 1 to uvac do meshop.setMapVert msh (uva+1) i UVarrays[uva][i]
+							local UVarrays = #(UV2_array,UV3_array,UV4_array,UV5_array)
+							case UVLayers of (
+								1:(
+									for uva=1 to UVarrays.count do (
+										local uvac=UVarrays[uva].count
+										if uvac > 0 do (
+											meshop.setNumMaps msh (uva+2) keep:true
+											for i = 1 to uvac do meshop.setMapVert msh (uva+1) i UVarrays[uva][i]
+										)
 									)
 								)
-							)
 
-							2:(
-								for uva=1 to UVarrays.count do(
-									local uvac=UVarrays[uva].count
-									if uvac > 1 do(
-										msh = mesh vertices:Vert_array faces:Face_array
-										msh.numTVerts = Vac
-										setNumCPVVerts msh msh.numTVerts
-										defaultVCFaces msh
-										buildTVFaces msh
-										if VertColors == 1 do(
-											setCVertMode msh true
-											setShadeCVerts msh true
-											for j = 1 to Cac do setvertcolor msh j Color_array[j]
-											for j = 1 to Cac do(meshop.setVertAlpha msh -2 j Alpha_array[j])
-										)
-										If Vac == uvac Do(
-											for j = 1 to Vac do setTVert msh j UVarrays[uva][j]
-											for j = 1 to Fac do setTVFace msh j Face_array[j]
-										)
-										for j = 1 to msh.numfaces do setFaceSmoothGroup msh j 1
+								2:(
+									for uva=1 to UVarrays.count do (
+										local uvac=UVarrays[uva].count
+										if uvac > 1 do (
+											msh = mesh vertices:Vert_array faces:Face_array
+											msh.numTVerts = Vac
+											setNumCPVVerts msh msh.numTVerts
+											defaultVCFaces msh
+											buildTVFaces msh
+											if VertColors == 1 do (
+												setCVertMode msh true
+												setShadeCVerts msh true
+												for j = 1 to Cac do setvertcolor msh j Color_array[j]
+												for j = 1 to Cac do (meshop.setVertAlpha msh -2 j Alpha_array[j])
+											)
+											if Vac == uvac do (
+												for j = 1 to Vac do setTVert msh j UVarrays[uva][j]
+												for j = 1 to Fac do setTVFace msh j Face_array[j]
+											)
+											for j = 1 to msh.numfaces do setFaceSmoothGroup msh j 1
 
-										msh.name = MeshName + " Layer "+ (uva+1) as string + (if FSHPArr[m].lodMdlCount == 1 then "" else " (LOD: " + l as string + ")")
-										msh.material = MeshMat
+											msh.name = MeshName + " Layer "+ (uva+1) as string + (if FSHPArr[m].lodMdlCount == 1 then "" else " (LOD: " + l as string + ")")
+											msh.material = MeshMat
 
-										select msh
+											select msh
 
-										addmodifier msh (Edit_Normals()) ui:off
-										msh.Edit_Normals.MakeExplicit selection:#{1..Normal_array.count}
-										EN_convertVS = msh.Edit_Normals.ConvertVertexSelection
-										EN_setNormal = msh.Edit_Normals.SetNormal
-										normID = #{}
-										for v = 1 to Nac do(
-											free normID
-											EN_convertVS #{v} &normID
-											for id in normID do EN_setNormal id Normal_array[v]
-										)
+											addmodifier msh (Edit_Normals()) ui:off
+											msh.Edit_Normals.MakeExplicit selection:#{1..Normal_array.count}
+											EN_convertVS = msh.Edit_Normals.ConvertVertexSelection
+											EN_setNormal = msh.Edit_Normals.SetNormal
+											normID = #{}
+											for v = 1 to Nac do (
+												free normID
+												EN_convertVS #{v} &normID
+												for id in normID do EN_setNormal id Normal_array[v]
+											)
 
-										if Bac > 0 do(
-											if FSHPArr[m].matrFlag == 0 then(
-												$.transform = BoneFixArray[FSHPArr[m].fsklIndx]
-												if RigModel != 3 do(
-													if RigModel == 1 then(
-														$.pivot = [0,0,0]
-														ResetXForm $
-														CollapseStack $	
-													)
-													skinMod = skin()
-													addModifier msh skinMod
-													maxbone = getnodebyname BoneArray[FSHPArr[m].fsklIndx].name
-													skinOps.addBone skinMod maxbone 0
-												)
-											)else(
-												if RigModel != 3 do(
-													skinMod = skin()
-													boneIDMap = #()
-													addModifier msh skinMod
-													msh.Skin.weightAllVertices = false
-
-													if FSHPArr[m].matrFlag == 1 do(for b in BoneArray do b.transform = matrix3 1)
-
-													for i = 1 to Bac do(
-														maxbone = getnodebyname BoneArray[i].name
-														skinOps.addBone skinMod maxbone (if i != Bac then 0 else 1)
-													)
-
-													local numSkinBones = skinOps.GetNumberBones skinMod
-													for i = 1 to numSkinBones do(
-														local boneName = skinOps.GetBoneName skinMod i 0
-														for j = 1 to Bac do(
-															if boneName == BoneArray[j].Name do(
-																boneIDMap[j] = i
-																j = Bac + 1
-															)
-														)
-													) -- Thanks to sunnydavis for the fix!
-
-													modPanel.setCurrentObject skinMod
-
-													for i = 1 to Vac do(
-														skinOps.SetVertexWeights skinMod i 1 1
-														skinOps.unnormalizeVertex skinMod i true 
-														skinOps.SetVertexWeights skinMod i 1 0
-														skinOps.unnormalizeVertex skinMod i false
-													)
-													skinOps.RemoveZeroWeights skinMod
-
-													for i = 1 to Wac do(
-														w = Weight_array[i]
-														bi = #() --bone index array
-														wv = #() --weight value array
-														wbic = w.boneids.count
-
-														for j = 1 to wbic do(
-															boneid = w.boneids[j]
-															weight = w.weights[j]
-															append bi boneIDMap[boneid]
-															append wv weight
-														)
-														skinOps.ReplaceVertexWeights skinMod i bi wv
-													)
-
-													if FSHPArr[m].matrFlag == 1 do(
-														for b = 1 to Bac do(BoneArray[b].transform = BoneFixArray[b])
-														if RigModel == 1 then(
+											if Bac > 0 do (
+												if FSHPArr[m].matrFlag == 0 then (
+													$.transform = BoneFixArray[FSHPArr[m].fsklIndx]
+													if RigModel != 3 do (
+														if RigModel == 1 then (
 															$.pivot = [0,0,0]
 															ResetXForm $
 															CollapseStack $	
-															-- Two-pass rigging to fix "meatballing".
-															skinMod = skin()
-															boneIDMap = #()
-															addModifier msh skinMod
-															msh.Skin.weightAllVertices = false
+														)
+														skinMod = skin()
+														addModifier msh skinMod
+														maxbone = getnodebyname BoneArray[FSHPArr[m].fsklIndx].name
+														skinOps.addBone skinMod maxbone 0
+													)
+												)else(
+													if RigModel != 3 do (
+														skinMod = skin()
+														boneIDMap = #()
+														addModifier msh skinMod
+														msh.Skin.weightAllVertices = false
 
-															for i = 1 to Bac do(
-																maxbone = getnodebyname BoneArray[i].name
-																skinOps.addBone skinMod maxbone (if i != Bac then 0 else 1)
+														if FSHPArr[m].matrFlag == 1 do (for b in BoneArray do b.transform = matrix3 1)
+
+														for i = 1 to Bac do (
+															maxbone = getnodebyname BoneArray[i].name
+															skinOps.addBone skinMod maxbone (if i != Bac then 0 else 1)
+														)
+
+														local numSkinBones = skinOps.GetNumberBones skinMod
+														for i = 1 to numSkinBones do (
+															local boneName = skinOps.GetBoneName skinMod i 0
+															for j = 1 to Bac do (
+																if boneName == BoneArray[j].Name do (
+																	boneIDMap[j] = i
+																	j = Bac + 1
+																)
 															)
+														) -- Thanks to sunnydavis for the fix!
 
-															local numSkinBones = skinOps.GetNumberBones skinMod
-															for i = 1 to numSkinBones do(
-																local boneName = skinOps.GetBoneName skinMod i 0
-																for j = 1 to Bac do(
-																	if boneName == BoneArray[j].Name do(h
-																		boneIDMap[j] = i
-																		j = Bac + 1
+														modPanel.setCurrentObject skinMod
+
+														for i = 1 to Vac do (
+															skinOps.SetVertexWeights skinMod i 1 1
+															skinOps.unnormalizeVertex skinMod i true 
+															skinOps.SetVertexWeights skinMod i 1 0
+															skinOps.unnormalizeVertex skinMod i false
+														)
+														skinOps.RemoveZeroWeights skinMod
+
+														for i = 1 to Wac do (
+															w = Weight_array[i]
+															bi = #() --bone index array
+															wv = #() --weight value array
+															wbic = w.boneids.count
+
+															for j = 1 to wbic do (
+																boneid = w.boneids[j]
+																weight = w.weights[j]
+																append bi boneIDMap[boneid]
+																append wv weight
+															)
+															skinOps.ReplaceVertexWeights skinMod i bi wv
+														)
+
+														if FSHPArr[m].matrFlag == 1 do (
+															for b = 1 to Bac do (BoneArray[b].transform = BoneFixArray[b])
+															if RigModel == 1 then (
+																$.pivot = [0,0,0]
+																ResetXForm $
+																CollapseStack $	
+																-- Two-pass rigging to fix "meatballing".
+																skinMod = skin()
+																boneIDMap = #()
+																addModifier msh skinMod
+																msh.Skin.weightAllVertices = false
+
+																for i = 1 to Bac do (
+																	maxbone = getnodebyname BoneArray[i].name
+																	skinOps.addBone skinMod maxbone (if i != Bac then 0 else 1)
+																)
+
+																local numSkinBones = skinOps.GetNumberBones skinMod
+																for i = 1 to numSkinBones do (
+																	local boneName = skinOps.GetBoneName skinMod i 0
+																	for j = 1 to Bac do (
+																		if boneName == BoneArray[j].Name do (h
+																			boneIDMap[j] = i
+																			j = Bac + 1
+																		)
 																	)
+																) -- Thanks to sunnydavis for the fix!
+
+																modPanel.setCurrentObject skinMod
+
+																for i = 1 to Vac do (
+																	skinOps.SetVertexWeights skinMod i 1 1
+																	skinOps.unnormalizeVertex skinMod i true 
+																	skinOps.SetVertexWeights skinMod i 1 0
+																	skinOps.unnormalizeVertex skinMod i false
 																)
-															) -- Thanks to sunnydavis for the fix!
+																skinOps.RemoveZeroWeights skinMod
 
-															modPanel.setCurrentObject skinMod
+																for i = 1 to Wac do (
+																	w = Weight_array[i]
+																	bi = #() --bone index array
+																	wv = #() --weight value array
+																	wbic = w.boneids.count
 
-															for i = 1 to Vac do(
-																skinOps.SetVertexWeights skinMod i 1 1
-																skinOps.unnormalizeVertex skinMod i true 
-																skinOps.SetVertexWeights skinMod i 1 0
-																skinOps.unnormalizeVertex skinMod i false
-															)
-															skinOps.RemoveZeroWeights skinMod
-
-															for i = 1 to Wac do(
-																w = Weight_array[i]
-																bi = #() --bone index array
-																wv = #() --weight value array
-																wbic = w.boneids.count
-
-																for j = 1 to wbic do(
-																	boneid = w.boneids[j]
-																	weight = w.weights[j]
-																	append bi boneIDMap[boneid]
-																	append wv weight
+																	for j = 1 to wbic do (
+																		boneid = w.boneids[j]
+																		weight = w.weights[j]
+																		append bi boneIDMap[boneid]
+																		append wv weight
+																	)
+																	skinOps.ReplaceVertexWeights skinMod i bi wv
 																)
-																skinOps.ReplaceVertexWeights skinMod i bi wv
 															)
 														)
-													)
 
+													)
 												)
 											)
 										)
