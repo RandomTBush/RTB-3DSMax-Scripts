@@ -3876,11 +3876,11 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 										(AttrArr[attr].attName == "_u4" or AttrArr[attr].attName == "_g3d_02__u0" or AttrArr[attr].attName == "All"): append UV5_Array[var1,var2,0]
 										(AttrArr[attr].attName == "_g3d_02_u0_u1"):(
 											append UV_Array[var1,var2,0]
-											append UV3_Array[var3,var4,0]
+											append UV2_Array[var3,var4,0]
 										)
 										(AttrArr[attr].attName == "_g3d_02_u2_u3"):(
-											append UV4_Array[var1,var2,0]
-											append UV5_Array[var3,var4,0]
+											append UV3_Array[var1,var2,0]
+											append UV4_Array[var3,var4,0]
 										)
 									)
 								)
