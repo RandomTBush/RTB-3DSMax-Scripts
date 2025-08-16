@@ -277,8 +277,8 @@ rollout TelltaleImporter "Telltale Games 'Almost All-In-One' Model Importer" wid
 		return convertTo32(Readshort fstream)
 	)
 	fn ReadBEShort fstream = (bit.swapBytes (readshort fstream #unsigned) 1 2)
-	fn ReadBELong fstream = (bit.swapBytes (bit.swapBytes (readlong f #unsignedstream #unsigned) 1 4) 2 3)
-	fn ReadBEFloat fstream = (bit.intAsFloat (bit.swapBytes (bit.swapBytes (readlong f #unsignedstream #unsigned) 1 4) 2 3))
+	fn ReadBELong fstream = (bit.swapBytes (bit.swapBytes (readlong fstream #unsigned) 1 4) 2 3)
+	fn ReadBEFloat fstream = (bit.intAsFloat (bit.swapBytes (bit.swapBytes (readlong fstream #unsigned) 1 4) 2 3))
 	fn ReadBEHalfFloat fstream = (return convertTo32(ReadBEshort fstream))
 	fn printDebug pr = (if tglDebug.state do print(pr))
 	fn BuildModel = (
