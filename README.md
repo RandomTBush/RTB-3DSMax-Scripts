@@ -202,6 +202,7 @@
 - Marvel's Guardians of the Galaxy [PC]
 - Minecraft: Story Mode (Season 1) [PC / PS4]
 - Minecraft: Story Mode Season 2 [PC / PS4]
+- Poker Night at the Inventory (2026, Remastered) [PC] (key for TTArchExt: 82CE999986DE9CB7EBBCE4CF97D78487996D92E3A2D7A8D8D99ABFC4A4D1D3658F7575B4CDC89BDEDEE8F1BCA69DB7E176935676D5DEA4)
 - Poker Night 2 [PC]
 - Sam & Max Season 1 [PC]
 - Sam & Max Season 2 [PC]
