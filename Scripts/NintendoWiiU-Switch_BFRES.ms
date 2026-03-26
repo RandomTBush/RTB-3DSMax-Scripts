@@ -6,89 +6,97 @@
 -- --------------------------------------------------
 -- Works with the following (known) Wii U games:
 -- --------------------------------------------------
--- Animal Crossing Plaza
--- Captain Toad: Treasure Tracker
--- Game & Wario
--- Kirby and the Rainbow Curse
--- The Legend of Zelda: Breath of the Wild
--- The Legend of Zelda: Wind Waker HD
--- Mario & Sonic at the Sochi 2014 Olympic Winter Games
--- Mario Kart 8
--- Mario Tennis: Ultra Smash
--- New Super Mario Bros. U / New Super Luigi U
--- Nintendo Land
--- Pikmin 3
--- Pokémon Rumble U
--- Pushmo World
--- Rodea: The Sky Soldier
--- Splatoon
--- Super Mario 3D World
--- Super Mario Maker
--- Tank! Tank! Tank!
--- Tokyo Mirage Sessions #FE
--- Wii Sports Club
--- Wii U BIOS
--- Yoshi's Woolly World
+-- Animal Crossing Plaza (v3.4.0.1)
+-- Captain Toad: Treasure Tracker (v3.5.0.3)
+-- Game & Wario (v3.2.0.1)
+-- Kirby and the Rainbow Curse (v3.5.0.2)
+-- The Legend of Zelda: Breath of the Wild (v4.5.0.3)
+-- The Legend of Zelda: Wind Waker HD (v3.4.0.1)
+-- Mario & Sonic at the Sochi 2014 Olympic Winter Games (v3.2.0.1)
+-- Mario Kart 8 (v3.4.0.4)
+-- Mario Tennis: Ultra Smash (v3.5.0.3)
+-- New Super Mario Bros. U / New Super Luigi U (v3.0.0.1)
+-- Nintendo Land (v3.0.0.1)
+-- Paper Mario: Color Splash (v3.5.0.3)
+-- Pikmin 3 (v3.2.0.1)
+-- Pokémon Rumble U (v3.2.0.1)
+-- Pushmo World (v3.4.0.2)
+-- Rodea: The Sky Soldier (v3.3.0.1 / v3.4.0.2)
+-- Splatoon (v3.5.0.3)
+-- Super Mario 3D World (v3.4.0.2)
+-- Super Mario Maker (v3.5.0.3)
+-- Tank! Tank! Tank! (v3.0.0.1)
+-- Tokyo Mirage Sessions #FE (v3.5.0.2)
+-- Wii Sports Club (v3.3.0.1)
+-- Wii U BIOS (v3.0.0.1, or v3.5.0.2 for the System Transfer tool)
+-- Yoshi's Woolly World (v3.5.0.2 / v3.5.0.3)
 -- --------------------------------------------------
 -- Works with the following (known) Nintendo Switch games:
 -- --------------------------------------------------
--- 1-2-Switch
--- Animal Crossing: New Horizons
--- ARMS
--- Brain Age / Dr. Kawashima's Brain Training
--- Captain Toad: Treasure Tracker
--- Club House Games: 51 Worldwide Classics / 51 Worldwide Games
--- Disney Magical World 2: Enchanted Edition
--- Endless Ocean: Luminous
--- Everybody 1-2-Switch!
--- F-Zero 99
--- Game Builder Garage
--- Go Vacation
--- Kirby and the Forgotten Land
--- Kirby Fighters 2
--- Kirby's Dream Buffet
--- Kirby's Return to Dream Land Deluxe
--- Kirby: Star Allies
--- Mario Golf: Super Rush
--- Mario Kart 8 Deluxe
--- Mario Party Superstars
--- Mario Tennis Aces
--- Mario vs. Donkey Kong
--- Miitopia
--- New Super Mario Bros. U Deluxe
--- Nintendo Labo 01: Variety Kit
--- Nintendo Labo 02: Robot Kit (somewhat, main game models use a different format)
--- Nintendo Labo 03: Vehicle Kit
--- Nintendo Labo 04: VR Kit
--- Nintendo Switch Sports
--- Nintendo World Championships: NES Edition
--- Paper Mario: The Origami King
--- Paper Mario: The Thousand-Year Door
--- Pikmin 3 Deluxe
--- Ring Fit Adventure
--- Rune Factory 4 Special
--- Splatoon 2
--- Splatoon 3
--- Super Kirby Clash
--- Super Mario 3D World + Bowser's Fury
--- Super Mario Bros. Wonder
--- Super Mario Maker 2
--- Super Mario Odyssey
--- Super Mario Party
--- Super Mario Party Jamboree
--- Super Smash Bros. Ultimate [effect files only!]
--- Sushi Striker: The Way of Sushido
--- Tetris 99
--- The Legend of Zelda: Breath of the Wild
--- The Legend of Zelda: Echoes of Wisdom
--- The Legend of Zelda: Link's Awakening
--- The Legend of Zelda: Tears of the Kingdom
--- Tokyo Mirage Sessions #FE Encore
--- Vroom in the Night Sky
--- WarioWare: Get It Together!
--- WarioWare: Move It!
+-- 1-2-Switch (v0.5.0.3)
+-- Animal Crossing: New Horizons (v0.9.0.0)
+-- ARMS (v0.5.0.3)
+-- Big Brain Academy: Brain vs. Brain (v0.9.0.0)
+-- Brain Age / Dr. Kawashima's Brain Training (v0.9.0.0)
+-- Captain Toad: Treasure Tracker (v0.8.1.1)
+-- Clubhouse Games: 51 Worldwide Classics / Games (v0.9.0.0)
+-- Disney Magical World 2: Enchanted Edition (v0.9.0.0)
+-- Endless Ocean: Luminous (v0.9.1.0)
+-- Everybody 1-2-Switch! (v0.9.0.0)
+-- F-Zero 99 (v0.9.1.0)
+-- Game Builder Garage (v0.8.1.1)
+-- Go Vacation (v0.8.0.0)
+-- Kirby and the Forgotten Land (v0.9.0.0)
+-- Kirby Fighters 2 (v0.9.0.0)
+-- Kirby's Dream Buffet (v0.9.1.0)
+-- Kirby's Return to Dream Land Deluxe (v0.9.1.0)
+-- Kirby: Star Allies (v0.8.1.1)
+-- Mario Golf: Super Rush (v0.9.0.0)
+-- Mario Kart 8 Deluxe (v0.5.0.3)
+-- Mario Party Superstars (v0.9.0.0)
+-- Mario Tennis Aces (v0.8.1.1)
+-- Mario vs. Donkey Kong (v0.10.0.0)
+-- Miitopia (v0.9.0.0)
+-- New Super Mario Bros. U Deluxe (v0.8.1.1)
+-- Nintendo Labo 01: Variety Kit (v0.8.1.1)
+-- Nintendo Labo 02: Robot Kit (v0.8.1.1) [somewhat, main game models use a different format]
+-- Nintendo Labo 03: Vehicle Kit (v0.8.1.1)
+-- Nintendo Labo 04: VR Kit (v0.8.1.1)
+-- Nintendo Switch Sports (v0.9.1.1)
+-- Nintendo World Championships: NES Edition (v0.9.1.0)
+-- Paper Mario: The Origami King (v0.9.0.0)
+-- Paper Mario: The Thousand-Year Door (v0.9.1.0)
+-- Pikmin 3 Deluxe (v0.8.1.1)
+-- Ring Fit Adventure (v0.9.0.0)
+-- Rune Factory 4 Special (v0.8.2.1)
+-- Splatoon 2 (v0.8.0.0, or v0.5.0.3 for Global Testfire)
+-- Splatoon 3 (v0.10.0.0)
+-- Super Kirby Clash (v0.9.0.0)
+-- Super Mario 3D World + Bowser's Fury (v0.9.0.0)
+-- Super Mario Bros. Wonder (v0.10.0.0)
+-- Super Mario Maker 2 (v0.9.0.0)
+-- Super Mario Odyssey (v0.8.0.0)
+-- Super Mario Party (v0.8.1.1)
+-- Super Mario Party Jamboree (v0.9.1.0)
+-- Super Smash Bros. Ultimate (v0.8.1.1) [effect files only!]
+-- Sushi Striker: The Way of Sushido (v0.8.1.1)
+-- Tetris 99 (v0.8.2.1)
+-- The Legend of Zelda: Breath of the Wild (v0.5.0.3)
+-- The Legend of Zelda: Echoes of Wisdom (v0.9.1.0)
+-- The Legend of Zelda: Link's Awakening (v0.9.0.0)
+-- The Legend of Zelda: Tears of the Kingdom (v0.10.0.0)
+-- Tokyo Mirage Sessions #FE Encore (v0.9.0.0)
+-- Tomodachi Life: Living the Dream (v0.10.2.2)
+-- Vroom in the Night Sky (v0.5.0.3)
+-- WarioWare: Get It Together! (v0.9.0.0)
+-- WarioWare: Move It! (v0.9.1.0)
 -- --------------------------------------------------
 -- Changelog:
+-- March 26, 2026:
+-- Added support for Tomodachi Life: Living the Dream models (new BFRES version, new headaches).
+-- Fixed Ninji's model (and possibly others) from Super Mario Party Jamboree not importing due to redundant UV mapping layers overlapping.
+-- Fixed dual-UV buffers (also from Jamboree) not calculating UVs correctly due to an oversight.
+
 -- October 18, 2024:
 -- Added support for models with additional vertex position sets (Super Mario Party Jamboree character faces).
 -- Fixed UVs not working with Super Mario Party Jamboree models.
@@ -210,7 +218,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 	checkbox tglMatInfo "Print material info?" pos:[8,BFRESImporter.height-20] width:115
 	checkbox tglDebug "Print debug info?" pos:[158,BFRESImporter.height-20] width:105
-	label lblUpdate "(Updated 10/28/2024)" pos:[BFRESImporter.width-115,BFRESImporter.height-19] width:110
+	label lblUpdate "(Updated 03/26/2026)" pos:[BFRESImporter.width-115,BFRESImporter.height-19] width:110
 
 	local FMDLOffset_array = #()
 	local f = #()
@@ -734,7 +742,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 					lstFMDL.items = FMDLName_array
 					lstFMDL.selection = 1
 					btnImport.enabled = true
-				)else(
+				) else (
 					btnImport.enabled = false
 				)
 			)catch(
@@ -876,7 +884,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 					lstFMDL.items = FMDLName_array
 					lstFMDL.selection = 1
 					btnImport.enabled = true
-				)else(
+				) else (
 					btnImport.enabled = false
 				)
 			)catch(
@@ -1483,7 +1491,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						if (bit.and boneData.bFlags2 0x0080) == 0x0000 then (tfm = inverse (scaleMatrix [boneData.scaleX,boneData.scaleY,boneData.scaleZ])) else (tfm = inverse (scaleMatrix [1,1,1]))
 						tfm = tfm * (quat boneData.rotX boneData.rotY boneData.rotZ boneData.rotW) as matrix3
 						tfm = inverse(tfm)
-					)else(
+					) else (
 						if (bit.and boneData.bFlags2 0x0080) == 0x0000 then (tfm = scaleMatrix [boneData.scaleX,boneData.scaleY,boneData.scaleZ]) else (tfm = scaleMatrix [1,1,1])
 						tfm = tfm * (eulerangles (boneData.rotX*(180/pi)) (boneData.rotY*(180/pi)) (boneData.rotZ*(180/pi))) as matrix3
 					)
@@ -2064,7 +2072,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 									maxbone = getnodebyname BoneArray[FSHPArr[m].fsklIndx].name
 									skinOps.addBone skinMod maxbone 0
 								)
-							)else(
+							) else (
 								if RigModel != 3 do (
 									if FSHPArr[m].matrFlag == 1 do (for b in BoneArray do b.transform = matrix3 1)
 									skinMod = skin()
@@ -2235,7 +2243,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 													maxbone = getnodebyname BoneArray[FSHPArr[m].fsklIndx].name
 													skinOps.addBone skinMod maxbone 0
 												)
-											)else(
+											) else (
 												if RigModel != 3 do (
 													skinMod = skin()
 													boneIDMap = #()
@@ -3385,7 +3393,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						if (bit.and boneData.bFlags2 0x0080) == 0x0000 then (tfm = inverse (scaleMatrix [boneData.scaleX,boneData.scaleY,boneData.scaleZ])) else (tfm = inverse (scaleMatrix [1,1,1]))
 						tfm = tfm * (quat boneData.rotX boneData.rotY boneData.rotZ boneData.rotW) as matrix3
 						tfm = inverse(tfm)
-					)else(
+					) else (
 						if (bit.and boneData.bFlags2 0x0080) == 0x0000 then (tfm = scaleMatrix [boneData.scaleX,boneData.scaleY,boneData.scaleZ]) else (tfm = scaleMatrix [1,1,1])
 						tfm = tfm * (eulerangles (boneData.rotX*(180/pi)) (boneData.rotY*(180/pi)) (boneData.rotZ*(180/pi))) as matrix3
 					)
@@ -3435,7 +3443,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 					Vert4_Array = #()
 					Vert5_Array = #()
 					Vert6_Array = #()
-					Vert7_Array = #()
+					Vert7_Array = #() -- I think Super Mario Party Jamboree only uses a maximum of 6, but whatever, we're accounting for 10.
 					Vert8_Array = #()
 					Vert9_Array = #()
 					Vert10_Array = #()
@@ -3455,6 +3463,9 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 					W2_array = #()
 					Weight_array = #()
 					VertGroupNum = 1
+
+					-- Dumb hotfix to prevent models like Ninji in Super Mario Party Jamboree and its redundant setups appending to the same UV arrays twice, causing an error. Initializing "has it been written yet?" values.
+					UV1Write = "No"; UV2Write = "No"; UV3Write = "No"; UV4Write = "No"
 
 					MeshName = FSHPArr[m].polyName
 					fseek f FVTXArr[FSHPArr[m].fvtxIndx].attArrOff#seek_set
@@ -3494,12 +3505,18 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						StrideSize = ReadLong f
 						if buf == 1 do (DataOffset = (DataStart + FVTXArr[FSHPArr[m].fvtxIndx].buffOff))
 						if buf > 1 do (DataOffset = BuffArr[buf - 1].DataOffset + BuffArr[buf - 1].BuffSize)
-						DataAlign = (bit.and (DataOffset) 0x7)
-						if DataAlign != 0 do (DataOffset = DataOffset + (8 - DataAlign))
+						if verNumB >= 10 and verNumC >= 2 then (
+							-- Tomodachi Life, and presumably Switch games newer than that need vertex buffers aligned at 0x100 blocks, not 0x08.
+							DataAlign = (bit.and (DataOffset) 0xFF)
+							if DataAlign != 0 do (DataOffset = DataOffset + (256 - DataAlign))
+						) else (
+							DataAlign = (bit.and (DataOffset) 0x7)
+							if DataAlign != 0 do (DataOffset = DataOffset + (8 - DataAlign))
+						)
 						append BuffArr (buffData buffSize: BuffSize strideSize: StrideSize dataOffset: DataOffset)
 					)
 					printDebug BuffArr
-					
+
 					for attr = 1 to AttrArr.count do (
 						locPoint = ((BuffArr[AttrArr[attr].buffIndx].dataOffset) + (AttrArr[attr].buffOff))
 						fseek f locPoint #seek_set
@@ -3691,7 +3708,6 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 									var2 = 1
 									var3 = 1
 									var4 = 1
-									print (var1 as string)
 								)
 								0x0315:(
 									-- 4 short integers, unsigned, bone IDs
@@ -3851,6 +3867,12 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 											var1 = (var1 as float / 65535)
 											var2 = ((var2 as float / 65535) * -1) + 1
 										)
+										0x0115:(
+											var1 = (var1 as float / 65535)
+											var2 = ((var2 as float / 65535) * -1) + 1
+											var3 = (var3 as float / 65535)
+											var4 = ((var4 as float / 65535) * -1) + 1
+										)
 										0x0209:(
 											var1 = (var1 as float / 127)
 											var2 = ((var2 as float / 127) * -1) + 1
@@ -3869,18 +3891,22 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 										)
 									)
 									case of (
-										(AttrArr[attr].attName == "_u0" or AttrArr[attr].attName == "color"): append UV_Array[var1,var2,0]
-										(AttrArr[attr].attName == "_u1"): append UV2_Array[var1,var2,0]
-										(AttrArr[attr].attName == "_u2" or AttrArr[attr].attName == "_g3d_02_u2_u0"): append UV3_Array[var1,var2,0]
-										(AttrArr[attr].attName == "_u3"): append UV4_Array[var1,var2,0]
-										(AttrArr[attr].attName == "_u4" or AttrArr[attr].attName == "_g3d_02__u0" or AttrArr[attr].attName == "All"): append UV5_Array[var1,var2,0]
+										(AttrArr[attr].attName == "_u0" or AttrArr[attr].attName == "color"): if UV1Write == "No" do (append UV_Array[var1,var2,0])
+										(AttrArr[attr].attName == "_u1"): if UV2Write == "No" do (append UV2_Array[var1,var2,0])
+										(AttrArr[attr].attName == "_u2"): if UV3Write == "No" do (append UV3_Array[var1,var2,0])
+										(AttrArr[attr].attName == "_u3"): if UV4Write == "No" do (append UV4_Array[var1,var2,0])
+										(AttrArr[attr].attName == "_u4" or AttrArr[attr].attName == "All"): append UV5_Array[var1,var2,0]
 										(AttrArr[attr].attName == "_g3d_02_u0_u1"):(
-											append UV_Array[var1,var2,0]
-											append UV2_Array[var3,var4,0]
+											if UV1Write == "No" do (append UV_Array[var1,var2,0])
+											if UV2Write == "No" do (append UV2_Array[var3,var4,0])
 										)
 										(AttrArr[attr].attName == "_g3d_02_u2_u3"):(
-											append UV3_Array[var1,var2,0]
-											append UV4_Array[var3,var4,0]
+											if UV3Write == "No" do (append UV3_Array[var1,var2,0])
+											if UV4Write == "No" do (append UV4_Array[var3,var4,0])
+										)
+										(AttrArr[attr].attName == "_g3d_02_u2_u0" or AttrArr[attr].attName == "_g3d_02__u0"):(
+											if UV3Write == "No" do (append UV3_Array[var1,var2,0])
+											if UV1Write == "No" do (append UV_Array[var3,var4,0])
 										)
 									)
 								)
@@ -3952,6 +3978,12 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 							fseek f VertStart #seek_set
 						) -- Close Vert Read Loop
+
+						-- Dumb hotfix to prevent models like Ninji in Super Mario Party Jamboree and its redundant setups appending to the same UV arrays twice, causing an error. Lets the script know to skip duplicate layers.
+						if UV_array.count != 0 and UV1Write == "No" do (UV1Write = "Yes")
+						if UV2_array.count != 0 and UV2Write == "No" do (UV2Write = "Yes")
+						if UV3_array.count != 0 and UV3Write == "No" do (UV3Write = "Yes")
+						if UV4_array.count != 0 and UV4Write == "No" do (UV4Write = "Yes")
 					) -- Close Attributes Loop
 
 					if UV_Array.count == 0 do (
@@ -4188,7 +4220,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 										maxbone = getnodebyname BoneArray[FSHPArr[m].fsklIndx].name
 										skinOps.addBone skinMod maxbone 0
 									)
-								)else(
+								) else (
 									if RigModel != 3 do (
 										skinMod = skin()
 										boneIDMap = #()
@@ -4295,7 +4327,6 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 									)
 								)
 							)
-
 							local UVarrays = #(UV2_array,UV3_array,UV4_array,UV5_array)
 							case UVLayers of (
 								1:(
@@ -4359,7 +4390,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 														maxbone = getnodebyname BoneArray[FSHPArr[m].fsklIndx].name
 														skinOps.addBone skinMod maxbone 0
 													)
-												)else(
+												) else (
 													if RigModel != 3 do (
 														skinMod = skin()
 														boneIDMap = #()
