@@ -92,6 +92,9 @@
 -- WarioWare: Move It! (v0.9.1.0)
 -- --------------------------------------------------
 -- Changelog:
+-- July 6, 2026:
+-- Hotfixed the Tomodachi Life: Living the Dream hotfix, apparently the buffer alignment doesn't apply to the initial one? (Fixes things like the "butterfly" from Effect/ObjHedge, for instance).
+
 -- March 26, 2026:
 -- Added support for Tomodachi Life: Living the Dream models (new BFRES version, new headaches).
 -- Fixed Ninji's model (and possibly others) from Super Mario Party Jamboree not importing due to redundant UV mapping layers overlapping.
@@ -745,7 +748,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 				) else (
 					btnImport.enabled = false
 				)
-			)catch(
+			) catch (
 				lstFMDL.items = #()
 				btnImport.enabled = false
 				messageBox ("Invalid file content. No model was found in: \n\""+ fname +"\"") title:"BFRES loading failed"
@@ -887,7 +890,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 				) else (
 					btnImport.enabled = false
 				)
-			)catch(
+			) catch (
 				lstFMDL.items = #()
 				btnImport.enabled = false
 				messageBox ("Invalid file content. No model was found in: \n\""+ fname +"\"") title:"BFRES loading failed"
@@ -3505,8 +3508,8 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						StrideSize = ReadLong f
 						if buf == 1 do (DataOffset = (DataStart + FVTXArr[FSHPArr[m].fvtxIndx].buffOff))
 						if buf > 1 do (DataOffset = BuffArr[buf - 1].DataOffset + BuffArr[buf - 1].BuffSize)
-						if verNumB >= 10 and verNumC >= 2 then (
-							-- Tomodachi Life, and presumably Switch games newer than that need vertex buffers aligned at 0x100 blocks, not 0x08.
+						if verNumB >= 10 and verNumC >= 2 and buf > 1 then (
+							-- Tomodachi Life, and presumably Switch games newer than that need vertex buffers aligned at 0x100 blocks, not 0x08. But not the first one?
 							DataAlign = (bit.and (DataOffset) 0xFF)
 							if DataAlign != 0 do (DataOffset = DataOffset + (256 - DataAlign))
 						) else (
