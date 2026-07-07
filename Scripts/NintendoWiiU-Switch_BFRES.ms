@@ -92,8 +92,8 @@
 -- WarioWare: Move It! (v0.9.1.0)
 -- --------------------------------------------------
 -- Changelog:
--- July 6, 2026:
--- Hotfixed the Tomodachi Life: Living the Dream hotfix, apparently the buffer alignment doesn't apply to the initial one? (Fixes things like the "butterfly" from Effect/ObjHedge, for instance).
+-- July 7, 2026:
+-- Added proper buffer alignment for Tomodachi Life, thanks to Switch Toolbox pointing me in the right direction (fixes broken effect models).
 
 -- March 26, 2026:
 -- Added support for Tomodachi Life: Living the Dream models (new BFRES version, new headaches).
@@ -221,7 +221,7 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 
 	checkbox tglMatInfo "Print material info?" pos:[8,BFRESImporter.height-20] width:115
 	checkbox tglDebug "Print debug info?" pos:[158,BFRESImporter.height-20] width:105
-	label lblUpdate "(Updated 03/26/2026)" pos:[BFRESImporter.width-115,BFRESImporter.height-19] width:110
+	label lblUpdate "(Updated 07/07/2026)" pos:[BFRESImporter.width-115,BFRESImporter.height-19] width:110
 
 	local FMDLOffset_array = #()
 	local f = #()
@@ -2400,8 +2400,9 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 				UnkOffset4,
 				vtxBuffSizeOff,
 				vtxStrideSizeOff,
-				UnkCount3,
-				padding					-- Padding (int32)
+				vertSkinCount,
+				padding,					-- Padding (int32)
+				DataAlign					-- Buffer alignment for newest BFRES files
 			)
 
 			struct fmath(
@@ -2682,10 +2683,12 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 								buffCount: (ReadByte f) \
 								sectIndx: (ReadShort f +1) \
 								vertCount: (ReadLong f) \
-								UnkCount3: (ReadLong f) \
+								vertSkinCount: (ReadShort f) \
+								padding: (ReadShort f) \
+								DataAlign: 8 \
 							)
 						)
-						(verNumA == 0 and verNumB >= 9):(
+						(verNumA == 0 and verNumB == 9):(
 							-- from 0.9.0.0 to 0.10.0.0
 							fvtx_info=(fvtxh \
 								fvtx: (ReadFixedString f 4) \
@@ -2711,7 +2714,39 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 								buffCount: (ReadByte f) \
 								sectIndx: (ReadShort f +1) \
 								vertCount: (ReadLong f) \
-								UnkCount3: (ReadLong f) \
+								vertSkinCount: (ReadShort f) \
+								padding: (ReadShort f) \
+								DataAlign: 8 \
+							)
+						)
+						(verNumA == 0 and verNumB >= 10):(
+							-- > 0.10.0.0
+							fvtx_info=(fvtxh \
+								fvtx: (ReadFixedString f 4) \
+								padding: (ReadLong f) \
+								attArrOff: (ReadLong f) \
+								padding: (ReadLong f) \
+								attIndxOff: (ReadLong f) \
+								padding: (ReadLong f) \
+								UnkOffset1: (ReadLong f) \
+								padding: (ReadLong f) \
+								UnkOffset3: (ReadLong f) \
+								padding: (ReadLong f) \
+								UnkOffset4: (ReadLong f) \
+								padding: (ReadLong f) \
+								vtxBuffSizeOff: (ReadLong f) \
+								padding: (ReadLong f) \
+								vtxStrideSizeOff: (ReadLong f) \
+								padding: (ReadLong f) \
+								padding: (ReadLong f) \
+								padding: (ReadLong f) \
+								buffOff: (ReadLong f) \
+								attCount: (ReadByte f) \
+								buffCount: (ReadByte f) \
+								sectIndx: (ReadShort f +1) \
+								vertCount: (ReadLong f) \
+								vertSkinCount: (ReadShort f) \
+								DataAlign: (ReadShort f) \
 							)
 						)
 					)
@@ -3508,14 +3543,8 @@ rollout BFRESImporter "Wii U / Switch BFRES model importer" width:450 height:300
 						StrideSize = ReadLong f
 						if buf == 1 do (DataOffset = (DataStart + FVTXArr[FSHPArr[m].fvtxIndx].buffOff))
 						if buf > 1 do (DataOffset = BuffArr[buf - 1].DataOffset + BuffArr[buf - 1].BuffSize)
-						if verNumB >= 10 and verNumC >= 2 and buf > 1 then (
-							-- Tomodachi Life, and presumably Switch games newer than that need vertex buffers aligned at 0x100 blocks, not 0x08. But not the first one?
-							DataAlign = (bit.and (DataOffset) 0xFF)
-							if DataAlign != 0 do (DataOffset = DataOffset + (256 - DataAlign))
-						) else (
-							DataAlign = (bit.and (DataOffset) 0x7)
-							if DataAlign != 0 do (DataOffset = DataOffset + (8 - DataAlign))
-						)
+						BuffAlign = (bit.and (DataOffset) (FVTXArr[FSHPArr[m].fvtxIndx].DataAlign - 1))
+						if BuffAlign != 0 do (DataOffset = DataOffset + (FVTXArr[FSHPArr[m].fvtxIndx].DataAlign - BuffAlign))
 						append BuffArr (buffData buffSize: BuffSize strideSize: StrideSize dataOffset: DataOffset)
 					)
 					printDebug BuffArr
