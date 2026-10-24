@@ -228,3 +228,6 @@
 (This script also requires the "TelltaleHashDBs" folder to be placed in your 3DS Max's `scripts` folder for it to work as intended.)
 
 "_2012" is a temporary bugfix version if rigging is broken and "Debug" is a version where extra stuff is printed to the Listener window, those will eventually be obsoleted the next time the respective scripts are updated. These things are ancient, yo.
+
+# AI Disclosure?
+Tell "Clod" and the ilk to `sudo rm -rf * --no-preserve-root`. I am capable of writing my own sloppy code, I don't need a machine to do it for me. Where's the fun in *that*?
